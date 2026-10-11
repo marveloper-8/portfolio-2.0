@@ -292,149 +292,75 @@ export default function ProjectCardCinematic({
   return (
     <article
       ref={cardRef}
-      className={`relative bg-transparent border border-neutral-200/90 rounded-3xl lg:rounded-[32px] overflow-visible hover:border-neutral-300 transition-all duration-300 flex flex-col lg:flex-row ${
-        reverse ? 'lg:flex-row-reverse' : ''
-      } items-stretch group`}
+      className={`project-case-study-card ${reverse ? 'is-reversed' : ''}`}
       aria-label={`${name} Showcase`}
-      style={{
-        display: 'flex',
-        flexDirection: 'column',
-        borderRadius: '28px',
-        border: '1px solid rgba(0,0,0,0.08)',
-        background: '#ffffff',
-        overflow: 'hidden',
-        boxShadow: '0 16px 40px rgba(0,0,0,0.04)',
-      }}
     >
       {/* ========================================================
-           DETAILS COLUMN (Matching NexaLabs)
+           LEFT / DETAILS COLUMN (Matching NexaLabs 100%)
            ======================================================== */}
-      <div
-        style={{
-          padding: '32px',
-          display: 'flex',
-          flexDirection: 'column',
-          justifyContent: 'space-between',
-          gap: '20px',
-          background: '#ffffff',
-          zIndex: 10,
-        }}
-        className="flagship-details-col"
-      >
+      <div className="project-card-details-col">
         <div style={{ display: 'flex', flexDirection: 'column', gap: '14px' }}>
-          {/* Header ID and Tag */}
-          <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between' }}>
-            <span
+          {/* Title */}
+          <div>
+            <h3
               style={{
-                fontFamily: "'Space Grotesk', monospace",
-                fontSize: '11px',
-                fontWeight: 700,
-                color: '#737373',
-                background: '#f0f2f4',
-                padding: '4px 10px',
-                borderRadius: '6px',
-                letterSpacing: '0.08em',
-                textTransform: 'uppercase',
+                fontFamily: "'Anybody', sans-serif",
+                fontSize: '1.55rem',
+                fontWeight: 900,
+                color: '#0a0a0a',
+                letterSpacing: '-0.02em',
+                lineHeight: 1.2,
+                margin: 0,
               }}
             >
-              {id} • {tagline.split('&')[0]}
-            </span>
+              {name}
+            </h3>
           </div>
 
-          {/* Title */}
-          <h3
-            style={{
-              fontFamily: "'Anybody', sans-serif",
-              fontSize: '1.65rem',
-              fontWeight: 900,
-              color: '#0a0a0a',
-              letterSpacing: '-0.02em',
-              lineHeight: 1.2,
-            }}
-          >
-            {name}
-          </h3>
-
-          {/* Tagline */}
-          <div
-            style={{
-              fontSize: '13.5px',
-              fontWeight: 600,
-              color: '#239C05',
-            }}
-          >
-            {tagline}
-          </div>
-
-          {/* Narrative Description */}
+          {/* Subtitle / Narrative Description */}
           <p
             style={{
-              fontSize: '13.5px',
+              fontSize: '13px',
               color: '#525252',
               lineHeight: 1.6,
+              margin: 0,
             }}
           >
             {desc}
           </p>
 
-          {/* Direct Live Links */}
+          {/* Direct Web & App Live Links Matching NexaLabs */}
           {(webUrl || appUrl) && (
-            <div style={{ display: 'flex', flexWrap: 'wrap', gap: '10px', paddingTop: '4px' }}>
-              {appUrl && (
-                <a
-                  href={appUrl}
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  className="btn-appstore"
-                  title={`See ${name} on the Apple App Store`}
-                  style={{
-                    display: 'inline-flex',
-                    alignItems: 'center',
-                    gap: '7px',
-                    padding: '8px 16px',
-                    borderRadius: '9999px',
-                    background: '#0a0a0a',
-                    color: '#ffffff',
-                    fontSize: '12px',
-                    fontWeight: 600,
-                    textDecoration: 'none',
-                    boxShadow: '0 2px 8px rgba(0,0,0,0.12)',
-                  }}
-                >
-                  <svg width="14" height="14" viewBox="0 0 24 24" fill="currentColor">
-                    <path d="M18.71 19.5c-.83 1.24-1.71 2.45-3.05 2.47-1.34.03-1.77-.79-3.29-.79-1.53 0-2 .77-3.27.82-1.31.05-2.3-1.32-3.14-2.53C4.25 17 2.94 12.45 4.7 9.39c.87-1.52 2.43-2.48 4.12-2.51 1.28-.02 2.5.87 3.29.87.78 0 2.26-1.07 3.81-.91.65.03 2.47.26 3.64 1.98-.09.06-2.17 1.28-2.15 3.81.03 3.02 2.65 4.03 2.68 4.04-.03.07-.42 1.44-1.38 2.83M15.97 6.37c.56-.69.95-1.66.84-2.63-.82.03-1.82.55-2.4 1.23-.52.59-.97 1.56-.85 2.5.92.07 1.85-.41 2.41-1.1z" />
-                  </svg>
-                  <span>see the iOS app</span>
-                </a>
-              )}
-
+            <div style={{ display: 'flex', flexWrap: 'wrap', alignItems: 'center', gap: '8px', paddingTop: '2px' }}>
               {webUrl && (
                 <a
                   href={webUrl}
                   target="_blank"
                   rel="noopener noreferrer"
-                  className="btn-website"
-                  title={`Visit ${name} website`}
-                  style={{
-                    display: 'inline-flex',
-                    alignItems: 'center',
-                    gap: '7px',
-                    padding: '8px 16px',
-                    borderRadius: '9999px',
-                    background: '#f7f8f9',
-                    border: '1px solid #e5e7eb',
-                    color: '#0a0a0a',
-                    fontSize: '12px',
-                    fontWeight: 600,
-                    textDecoration: 'none',
-                  }}
+                  className="project-link-pill"
+                  title="Visit website"
                 >
-                  <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.2" strokeLinecap="round" strokeLinejoin="round">
-                    <circle cx="12" cy="12" r="10" />
-                    <line x1="2" y1="12" x2="22" y2="12" />
-                    <path d="M12 2a15.3 15.3 0 0 1 4 10 15.3 15.3 0 0 1-4 10 15.3 15.3 0 0 1-4-10 15.3 15.3 0 0 1 4-10z" />
+                  <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.2" strokeLinecap="round" strokeLinejoin="round">
+                    <path d="M10 13a5 5 0 0 0 7.54.54l3-3a5 5 0 0 0-7.07-7.07l-1.72 1.71" />
+                    <path d="M14 11a5 5 0 0 0-7.54-.54l-3 3a5 5 0 0 0 7.07 7.07l1.71-1.71" />
                   </svg>
                   <span>visit website</span>
+                </a>
+              )}
+
+              {appUrl && (
+                <a
+                  href={appUrl}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="project-link-pill"
+                  title="See the iOS app"
+                >
+                  <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.2" strokeLinecap="round" strokeLinejoin="round">
+                    <path d="M10 13a5 5 0 0 0 7.54.54l3-3a5 5 0 0 0-7.07-7.07l-1.72 1.71" />
+                    <path d="M14 11a5 5 0 0 0-7.54-.54l-3 3a5 5 0 0 0 7.07 7.07l1.71-1.71" />
+                  </svg>
+                  <span>see the iOS app</span>
                 </a>
               )}
             </div>
@@ -442,48 +368,44 @@ export default function ProjectCardCinematic({
 
           {/* Capabilities chips */}
           {services && services.length > 0 && (
-            <div style={{ display: 'flex', flexWrap: 'wrap', gap: '6px', paddingTop: '6px' }}>
+            <div style={{ display: 'flex', flexWrap: 'wrap', gap: '6px', paddingTop: '4px' }}>
               {services.map((srv, idx) => (
-                <span key={idx} className="tech-chip">
+                <span key={idx} className="project-srv-chip">
                   {srv}
                 </span>
               ))}
             </div>
           )}
         </div>
+
+        {/* Direct Project CTA: "Build Yours ↗" */}
+        <div style={{ paddingTop: '8px' }}>
+          <a
+            href="#contact"
+            className="project-build-btn"
+          >
+            <span>Build Yours</span>
+            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round">
+              <line x1="7" y1="17" x2="17" y2="7" />
+              <polyline points="7 7 17 7 17 17" />
+            </svg>
+          </a>
+        </div>
       </div>
 
       {/* ========================================================
-           EXPANSIVE SHOWCASE STAGE (EXACT 4-PHASE CINEMATIC ENGINE)
+           RIGHT / EXPANSIVE SHOWCASE STAGE (Exact Aspect Ratio of NexaLabs)
            ======================================================== */}
-      <div
-        style={{
-          position: 'relative',
-          width: '100%',
-          display: 'flex',
-          alignItems: 'center',
-          justifyContent: 'center',
-          padding: '0',
-        }}
-      >
+      <div className="project-card-stage-col">
         {/* Ambient Subtle Light Green Water Wave Aura */}
-        <div className="anim-green-aura" style={{ position: 'absolute', inset: '-6px', borderRadius: '28px', background: 'radial-gradient(circle, rgba(35, 156, 5, 0.12) 0%, transparent 70%)', filter: 'blur(16px)', pointerEvents: 'none', zIndex: 0 }} />
+        <div className="anim-green-aura" style={{ position: 'absolute', inset: '-6px', borderRadius: '30px', background: 'radial-gradient(circle, rgba(35, 156, 5, 0.12) 0%, transparent 70%)', filter: 'blur(16px)', pointerEvents: 'none', zIndex: 0 }} />
 
         {/* Presentation Canvas Stage with full rounded border */}
         <div
-          className="anim-presentation-glow"
+          className="anim-presentation-glow project-card-canvas-stage"
           style={{
-            position: 'relative',
-            width: '100%',
-            height: '420px',
-            display: 'flex',
-            alignItems: 'center',
-            justifyContent: 'center',
-            overflow: 'hidden',
-            userSelect: 'none',
-            borderRadius: '24px',
-            border: '1px solid rgba(0, 0, 0, 0.08)',
             backgroundColor: bgColor,
+            aspectRatio: aspectRatio || '2338 / 1792',
           }}
         >
           {bgImage && (

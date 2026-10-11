@@ -67,11 +67,16 @@ export default function Home() {
   const [borderWidth, setBorderWidth] = useState(10);
   const [isAvatarHovered, setIsAvatarHovered] = useState(false);
 
-  // Avatar refs for mouse-facing green border calculation & organic teardrop bulge
+  // Avatar refs for continuous flight docking, organic teardrop bulge & green aura
+  const avatarAnchorRef = useRef(null);
+  const avatarWrapRef = useRef(null);
+  const avatarBubbleRef = useRef(null);
   const avatarRingRef = useRef(null);
   const avatarOuterPathRef = useRef(null);
   const avatarWhitePathRef = useRef(null);
   const avatarPhotoPathRef = useRef(null);
+  const avatarTooltipRef = useRef(null);
+  const navAvatarSlotRef = useRef(null);
 
   // Measure hero square matching Alata font metrics
   const measureHeroSquare = () => {
@@ -102,16 +107,134 @@ export default function Home() {
     return () => window.removeEventListener('resize', measureHeroSquare);
   }, []);
 
-  // Mouse tracking to orient green border highlight & bulge profile image dynamically towards cursor
+  // Mouse & Scroll tracking: continuous physical flight docking to navbar + mouse-facing bulge & green bubbling aura
   useEffect(() => {
     let animId;
     let targetAngle = -Math.PI / 2;
     let targetBulge = 0.055;
+    let targetBubbleOpacity = 0.22; // Base ambient glow visible immediately
     let currentAngle = -Math.PI / 2;
     let currentBulge = 0.055;
+    let currentBubbleOpacity = 0.22;
+    let currentHoverScale = 1.0;
+
+    let pointerX = typeof window !== 'undefined' ? window.innerWidth / 2 : 0;
+    let pointerY = typeof window !== 'undefined' ? 300 : 0;
+    let isHovered = false;
 
     const updateFrame = () => {
-      // Shortest-distance angle interpolation
+      // 1. Continuous physical flight docking interpolation to navbar slot
+      const scrollY = window.scrollY || window.pageYOffset || 0;
+      const DOCK_END = 200; // completes flight within first 200px of scroll
+      const rawProgress = Math.min(1, Math.max(0, scrollY / DOCK_END));
+      const dockEase = rawProgress * rawProgress * (3 - 2 * rawProgress); // Smooth cubic ease
+
+      const anchor = avatarAnchorRef.current;
+      const slot = navAvatarSlotRef.current;
+      const wrap = avatarWrapRef.current;
+
+      let currentCenterX = 0;
+      let currentCenterY = 0;
+      let baseScale = 1.0;
+      let currentAvatarRadius = 60;
+
+      if (slot && wrap) {
+        const slotRect = slot.getBoundingClientRect();
+        const x1 = slotRect.left + slotRect.width / 2;
+        const y1 = slotRect.top + slotRect.height / 2;
+
+        const naturalDiameter = 154 * (2 * BASE_R_OUTER); // ~122px
+        const scale1 = slotRect.width / naturalDiameter; // ~0.2951
+
+        if (dockEase >= 1.0) {
+          // ROCK-SOLID STATIONARY IN NAVBAR:
+          // Center is locked strictly to slot center (no anchor dependency, zero scroll bobbing on other sections!)
+          currentCenterX = x1;
+          currentCenterY = y1;
+          baseScale = scale1;
+          currentAvatarRadius = slotRect.width / 2;
+        } else if (anchor) {
+          const anchorRect = anchor.getBoundingClientRect();
+          const x0 = anchorRect.left + anchorRect.width / 2;
+          const y0 = anchorRect.top + anchorRect.height / 2;
+          const scale0 = anchorRect.width / 154;
+
+          currentCenterX = (1 - dockEase) * x0 + dockEase * x1;
+          currentCenterY = (1 - dockEase) * y0 + dockEase * y1;
+          baseScale = (1 - dockEase) * scale0 + dockEase * scale1;
+          currentAvatarRadius = (1 - dockEase) * (anchorRect.width * BASE_R_OUTER) + dockEase * (slotRect.width / 2);
+        } else {
+          currentCenterX = x1;
+          currentCenterY = y1;
+          baseScale = scale1;
+          currentAvatarRadius = slotRect.width / 2;
+        }
+
+        // Smooth expansion on hover (expands by 24% when docked, 6% in hero)
+        const targetHoverScale = isHovered ? (dockEase > 0.8 ? 1.24 : 1.06) : 1.0;
+        currentHoverScale += (targetHoverScale - currentHoverScale) * 0.18;
+        const renderedScale = baseScale * currentHoverScale;
+
+        // Position avatar with position: fixed relative to viewport
+        const tx = currentCenterX - 77;
+        const ty = currentCenterY - 77;
+
+        wrap.style.transform = `translate3d(${tx.toFixed(2)}px, ${ty.toFixed(2)}px, 0) scale(${renderedScale.toFixed(4)})`;
+        wrap.style.zIndex = '60';
+
+        if (dockEase >= 0.95) {
+          wrap.classList.add('docked');
+          wrap.classList.remove('in-flight');
+        } else if (dockEase > 0.05) {
+          wrap.classList.add('in-flight');
+          wrap.classList.remove('docked');
+        } else {
+          wrap.classList.remove('in-flight', 'docked');
+        }
+
+        // Counter-scale custom bottom tooltip so it stays crisp at 100% readable size
+        if (avatarTooltipRef.current) {
+          const counterScale = 1 / Math.max(0.1, renderedScale);
+          avatarTooltipRef.current.style.transform = `translateX(-50%) scale(${counterScale.toFixed(4)})`;
+        }
+      }
+
+      // 2. Vector from avatar center to pointer
+      const dx = pointerX - currentCenterX;
+      const dy = pointerY - currentCenterY;
+      const dist = Math.sqrt(dx * dx + dy * dy);
+      targetAngle = Math.atan2(dy, dx);
+
+      // 3. Bulge and hover calculations
+      const hitRadius = currentAvatarRadius * (isHovered ? 1.25 : 1.0) + (dockEase > 0.8 ? 5 : 2);
+      if (dist <= hitRadius) {
+        // Pointer is on the avatar
+        targetBulge = 0; // perfect circle
+        targetBubbleOpacity = 1.0;
+        isHovered = true;
+        setIsAvatarHovered(true);
+      } else {
+        isHovered = false;
+        setIsAvatarHovered(false);
+
+        // When mouse is on other sections:
+        // Bulge happens dynamically towards the mouse!
+        // In navbar, maxBulge is 0.092 so it visibly bulges and pushes out of the nav bar!
+        const distFromEdge = dist - hitRadius;
+        const rampDist = dockEase > 0.8 ? 50 : 130;
+        const ramp = Math.min(1, Math.max(0, distFromEdge / rampDist));
+        const maxBulge = dockEase > 0.8 ? 0.092 : 0.078;
+        targetBulge = maxBulge * ramp;
+
+        if (dockEase > 0.8) {
+          targetBubbleOpacity = 0.15;
+        } else {
+          const proximity = Math.max(0, 1 - distFromEdge / 300);
+          targetBubbleOpacity = 0.18 + 0.82 * Math.pow(proximity, 1.15);
+        }
+      }
+
+      // 4. Smooth angle, bulge, and bubble interpolation
       let angleDiff = targetAngle - currentAngle;
       while (angleDiff > Math.PI) angleDiff -= 2 * Math.PI;
       while (angleDiff < -Math.PI) angleDiff += 2 * Math.PI;
@@ -122,12 +245,25 @@ export default function Home() {
         currentBulge = 0;
       }
 
+      currentBubbleOpacity += (targetBubbleOpacity - currentBubbleOpacity) * 0.16;
+
+      // Bubble aura opacity
+      const effectiveBubbleOpacity = isHovered ? currentBubbleOpacity : (dockEase > 0.8 ? (currentBubbleOpacity * 0.3) : currentBubbleOpacity);
+
+      if (avatarBubbleRef.current) {
+        avatarBubbleRef.current.style.opacity = effectiveBubbleOpacity.toFixed(3);
+      }
+      if (wrap) {
+        wrap.style.setProperty('--bubble-opacity', effectiveBubbleOpacity.toFixed(3));
+      }
+
       const ring = avatarRingRef.current;
       if (ring) {
         const deg = currentAngle * (180 / Math.PI) + 90;
         ring.style.setProperty('--mouse-angle', `${deg}deg`);
       }
 
+      // Generate the organic bulge or smooth circle path
       const outerD = buildBulgePath(0.5, 0.5, BASE_R_OUTER, currentAngle, currentBulge);
       const whiteD = buildBulgePath(0.5, 0.5, BASE_R_WHITE, currentAngle, currentBulge);
       const photoD = buildBulgePath(0.5, 0.5, BASE_R_PHOTO, currentAngle, currentBulge);
@@ -140,38 +276,15 @@ export default function Home() {
     };
 
     const handlePointerMove = (e) => {
-      const ring = avatarRingRef.current;
-      if (!ring) return;
-      const rect = ring.getBoundingClientRect();
-      const centerX = rect.left + rect.width / 2;
-      const centerY = rect.top + rect.height / 2;
-      const dx = e.clientX - centerX;
-      const dy = e.clientY - centerY;
-      const dist = Math.sqrt(dx * dx + dy * dy);
-
-      targetAngle = Math.atan2(dy, dx);
-
-      // Responsive radius matching the avatar boundary
-      const avatarRadius = rect.width * 0.395;
-
-      // When on the image (dist <= avatarRadius), bulge becomes 0 (perfect circle) & bubbling green aura activates.
-      // As pointer gets closer to avatarRadius, the bulge progressively reduces.
-      if (dist <= avatarRadius) {
-        targetBulge = 0;
-        setIsAvatarHovered(true);
-      } else {
-        const edgeDist = dist - avatarRadius;
-        const ramp = Math.min(1, edgeDist / 140);
-        const farTaper = Math.max(0.65, 1 - (edgeDist - 140) / 500);
-        targetBulge = ramp * farTaper * 0.080; // ranges from 0 up to ~12px, reducing as you approach
-        setIsAvatarHovered(false);
-      }
+      pointerX = e.clientX;
+      pointerY = e.clientY;
     };
 
     window.addEventListener('mousemove', handlePointerMove, { passive: true });
     window.addEventListener('touchmove', (e) => {
       if (e.touches && e.touches.length > 0) {
-        handlePointerMove(e.touches[0]);
+        pointerX = e.touches[0].clientX;
+        pointerY = e.touches[0].clientY;
       }
     }, { passive: true });
 
@@ -287,6 +400,7 @@ EDUCATION:
   };
 
   // 3 Flagship Projects with full exact NexaLabs animations
+  // 3 Flagship Real-World Production Platforms (matching NexaLabs exact assets & data)
   const flagshipProjects = [
     {
       id: '01',
@@ -298,9 +412,9 @@ EDUCATION:
       aspectRatio: '2338 / 1792',
       logoImage: '/projects/lola.png',
       iconImage: '/projects/lola-icon.png',
-      infoImage: '/projects/lola1.png',
+      infoImage: '/projects/lola3.png',
       appImages: ['/projects/lola3-1.png', '/projects/lola3-2.png', '/projects/lola3-3.png'],
-      webImage: '/projects/lola4.png',
+      webImage: '/projects/lola2.jpg',
       webUrl: 'https://lolaschools.com',
       appUrl: 'https://apps.apple.com/ng/app/lola-jamb-waec-prep/id6785081192',
       services: ['SaaS & Web Apps', 'Websites', 'Mobile Apps', 'Backends & Cloud', 'Brand & Design', 'Publishing', 'QA & Security'],
@@ -316,9 +430,9 @@ EDUCATION:
       aspectRatio: '2624 / 1632',
       logoImage: '/projects/donethat.png',
       iconImage: '/projects/donethat-icon.png',
-      infoImage: '/projects/donethat1.png',
+      infoImage: '/projects/donethat3.png',
       appImages: ['/projects/donethat3-1.png', '/projects/donethat3-2.png', '/projects/donethat3-3.png'],
-      webImage: '/projects/donethat4.png',
+      webImage: '/projects/donethat2.jpg',
       webUrl: 'https://donethat.online',
       appUrl: 'https://apps.apple.com/ng/app/donethat-sync/id6762071026',
       services: ['Websites', 'Mobile Apps', 'Backends & Cloud', 'Brand & Design', 'Publishing', 'QA & Security'],
@@ -335,9 +449,9 @@ EDUCATION:
       aspectRatio: '2342 / 1792',
       logoImage: '/projects/bible.png',
       iconImage: '/projects/bible-icon.png',
-      infoImage: '/projects/bible1.png',
+      infoImage: '/projects/bible3.png',
       appImages: ['/projects/bible3-1.png', '/projects/bible3-2.png', '/projects/bible3-3.png'],
-      webImage: '/projects/bible4.png',
+      webImage: '/projects/bible2.jpg',
       webUrl: 'https://play.lolaschools.com',
       appUrl: 'https://apps.apple.com/ng/app/bible-words-play/id6757534699',
       services: ['Websites', 'Mobile Apps', 'Backends & Cloud', 'Brand & Design', 'Publishing', 'QA & Security'],
@@ -469,6 +583,14 @@ EDUCATION:
               </svg>
             </a>
 
+            {/* Target Docking Slot for Animated Profile Avatar */}
+            <div
+              ref={navAvatarSlotRef}
+              className="nav-avatar-slot"
+              onClick={() => setIsCvModalOpen(true)}
+              aria-label="Profile Avatar slot in navigation"
+            />
+
             {/* Mobile Hamburger Button */}
             <button
               onClick={() => setIsMobileMenuOpen(!isMobileMenuOpen)}
@@ -507,48 +629,57 @@ EDUCATION:
         <section id="hero" className="hero-section">
           <div className="container">
 
-            {/* FOUNDER PROFILE AVATAR ON HERO (DYNAMIC MOUSE-FACING BULGE & GREEN HIGHLIGHT) */}
-            <div
-              className="hero-avatar-wrap"
-              onMouseEnter={() => setIsAvatarHovered(true)}
-              onMouseLeave={() => setIsAvatarHovered(false)}
-            >
-              {/* Bubbling green shadowy aura behind the circle when on the image */}
-              <div className={`hero-avatar-bubble-aura ${isAvatarHovered ? 'active' : ''}`} aria-hidden="true">
-                <div className="bubble-shadow-glow" />
-                <div className="bubble-blob bubble-blob-1" />
-                <div className="bubble-blob bubble-blob-2" />
-                <div className="bubble-blob bubble-blob-3" />
-                <div className="bubble-satellite bubble-sat-1" />
-                <div className="bubble-satellite bubble-sat-2" />
-                <div className="bubble-satellite bubble-sat-3" />
-                <div className="bubble-satellite bubble-sat-4" />
-                <div className="bubble-satellite bubble-sat-5" />
-              </div>
-
+            {/* FOUNDER PROFILE AVATAR ON HERO (DYNAMIC MOUSE-FACING BULGE & FLIGHT DOCKING) */}
+            <div ref={avatarAnchorRef} className="hero-avatar-anchor">
               <div
-                ref={avatarRingRef}
-                className="hero-avatar-ring"
+                ref={avatarWrapRef}
+                className="hero-avatar-wrap"
                 onClick={() => setIsCvModalOpen(true)}
-                title="Joshua Samuel Equere — Click to preview resume"
+                onMouseEnter={() => setIsAvatarHovered(true)}
+                onMouseLeave={() => setIsAvatarHovered(false)}
               >
-                {/* Middle white rim */}
-                <div className="hero-avatar-white" />
-
-                {/* Inner clipped photo - stays steady and does not shift */}
-                <div className="hero-avatar-photo-wrap">
-                  <img
-                    src="/founder.jpg"
-                    alt="Joshua Samuel Equere"
-                    className="hero-avatar-img"
-                  />
+                {/* Bubbling green shadowy aura behind the circle */}
+                <div
+                  ref={avatarBubbleRef}
+                  className={`hero-avatar-bubble-aura ${isAvatarHovered ? 'active' : ''}`}
+                  aria-hidden="true"
+                >
+                  <div className="bubble-shadow-glow" />
+                  <div className="bubble-blob bubble-blob-1" />
+                  <div className="bubble-blob bubble-blob-2" />
+                  <div className="bubble-blob bubble-blob-3" />
+                  <div className="bubble-satellite bubble-sat-1" />
+                  <div className="bubble-satellite bubble-sat-2" />
+                  <div className="bubble-satellite bubble-sat-3" />
+                  <div className="bubble-satellite bubble-sat-4" />
+                  <div className="bubble-satellite bubble-sat-5" />
                 </div>
-              </div>
 
-              {/* Sleek floating tooltip when hovering the circle */}
-              <div className={`hero-avatar-tooltip ${isAvatarHovered ? 'visible' : ''}`} aria-hidden="true">
-                <span className="hero-avatar-tooltip-dot" />
-                <span>Tap to view CV / Resume</span>
+                <div
+                  ref={avatarRingRef}
+                  className="hero-avatar-ring"
+                >
+                  {/* Middle white rim */}
+                  <div className="hero-avatar-white" />
+
+                  {/* Inner clipped photo - stays steady and does not shift */}
+                  <div className="hero-avatar-photo-wrap">
+                    <img
+                      src="/founder.jpg"
+                      alt="Joshua Samuel Equere"
+                      className="hero-avatar-img"
+                    />
+                  </div>
+                </div>
+
+                {/* Sleek bottom tooltip (without dot, counters parent scale) */}
+                <div
+                  ref={avatarTooltipRef}
+                  className={`hero-avatar-tooltip ${isAvatarHovered ? 'visible' : ''}`}
+                  aria-hidden="true"
+                >
+                  <span>Tap to view CV / Resume</span>
+                </div>
               </div>
             </div>
 
