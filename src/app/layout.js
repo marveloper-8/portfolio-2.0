@@ -1,7 +1,7 @@
 import "./globals.css";
 
 const SITE_URL = process.env.NEXT_PUBLIC_SITE_URL || 'https://josh.trynexalabs.com';
-const SITE_DESC = "running 17+ services on a $14 server because overpaying for cloud is a skill issue. senior dev & founder of nexalabs.";
+const SITE_DESC = "running 17+ services on a $14 server because overpaying for cloud is a skill issue.";
 
 export const metadata = {
   metadataBase: new URL(SITE_URL),
