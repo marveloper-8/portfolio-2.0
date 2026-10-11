@@ -1,7 +1,7 @@
 import "./globals.css";
 
 const SITE_URL = process.env.NEXT_PUBLIC_SITE_URL || 'https://josh.trynexalabs.com';
-const SITE_DESC = "Running 17+ production services on a $14 server. Powering $10M+ daily volume, 10k+ concurrent players, and 1M+ daily actions with 65% lower latency.";
+const SITE_DESC = "Running 17+ services on a $14 server. Scaled production systems to $10M+ daily volume, 10k+ concurrent players, and 1M+ daily actions at 65% lower latency.";
 
 export const metadata = {
   metadataBase: new URL(SITE_URL),
