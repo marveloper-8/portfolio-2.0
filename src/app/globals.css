@@ -134,7 +134,7 @@ body {
   width: 100%;
   max-width: 560px;
   height: 50px;
-  padding: 0 18px;
+  padding: 0 6px 0 16px;
   border-radius: var(--radius-pill);
   background: linear-gradient(135deg, rgba(255, 255, 255, 0.78) 0%, rgba(255, 255, 255, 0.55) 100%);
   backdrop-filter: blur(20px) saturate(180%);

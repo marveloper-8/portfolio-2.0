@@ -2,40 +2,51 @@ import "./globals.css";
 
 export const metadata = {
   metadataBase: new URL('https://nexalabs.site'),
-  title: "Joshua Samuel Equere | Senior Software Engineer",
-  description: "Senior Software Engineer specializing in mobile apps, web platforms, high-concurrency servers (Go, Python), and cloud architecture (AWS). Founder of NexaLabs.",
+  title: "Joshua Equere | Senior Software Engineer",
+  description: "i build scalable systems, ship clean apps, and let the code do the talking. senior software engineer & founder of nexalabs.",
   keywords: [
+    "Joshua Equere",
     "Joshua Samuel Equere",
     "Senior Software Engineer",
+    "Full Stack Engineer",
     "Go",
     "Golang",
     "React Native",
     "Next.js",
-    "NexaLabs",
     "Distributed Systems",
-    "Cloud Architecture"
+    "Cloud Architecture",
+    "NexaLabs"
   ],
   authors: [{ name: "Joshua Samuel Equere" }],
   openGraph: {
-    title: "Joshua Samuel Equere | Senior Software Engineer",
-    description: "Building complete digital products from start to finish. Mobile apps, web platforms, robust servers, and scalable cloud infrastructure.",
+    title: "Joshua Equere | Senior Software Engineer",
+    description: "i build scalable systems, ship clean apps, and let the code do the talking. senior software engineer & founder of nexalabs.",
     url: "https://nexalabs.site",
-    siteName: "Joshua Samuel Equere",
+    siteName: "Joshua Equere",
     images: [
       {
-        url: "/nexalabs-long.png",
+        url: "/og-image.jpg",
         width: 1200,
         height: 630,
-        alt: "Joshua Samuel Equere Portfolio",
+        alt: "Joshua Equere | Senior Software Engineer",
       },
     ],
     locale: "en_US",
     type: "website",
   },
+  twitter: {
+    card: "summary_large_image",
+    title: "Joshua Equere | Senior Software Engineer",
+    description: "i build scalable systems, ship clean apps, and let the code do the talking. senior software engineer & founder of nexalabs.",
+    images: ["/og-image.jpg"],
+  },
   icons: {
-    icon: "/logo.png",
-    shortcut: "/logo.png",
-    apple: "/logo.png",
+    icon: [
+      { url: "/icon.png", sizes: "192x192", type: "image/png" },
+      { url: "/favicon.ico", sizes: "any" }
+    ],
+    shortcut: "/favicon.ico",
+    apple: "/apple-icon.png",
   },
 };
 
