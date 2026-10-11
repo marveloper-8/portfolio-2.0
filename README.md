@@ -1,4 +1,4 @@
-# Joshua Samuel Equere — Senior Software Engineer Portfolio (Next.js)
+# Joshua Samuel Equere | Senior Software Engineer Portfolio (Next.js)
 
 A dark-themed, minimalist, high-performance portfolio web application built with **Next.js (App Router)** for **Joshua Samuel Equere**, Senior Software Engineer (Mobile, Web, Backend, & Cloud).
 
@@ -17,10 +17,10 @@ A dark-themed, minimalist, high-performance portfolio web application built with
   - **Download CV (PDF)**: Built-in print/download trigger leveraging `@media print` rules to produce an executive, print-ready PDF resume directly in the browser.
   - **Copy Plain Text ATS Resume**: 1-click clipboard copy for recruitment workflows.
 - **Selected Works & NexaLabs Ventures**:
-  - **[NexaLabs LTD](https://nexalabs.site)** — Flagship software publishing business & cloud infrastructure.
-  - **[DoneThat: Sync](https://donethat.online)** — Real-time mobile task sync with WebSockets and PostgreSQL.
-  - **[Bible Words: Play](https://play.lolaschools.com)** — 10k+ concurrent players, 99.9% uptime, AWS CloudFront.
-  - **[LOLA — JAMB & WAEC Prep](https://lolaschools.com)** — National exam preparation platform with 65% faster live transmission.
+  - **[NexaLabs LTD](https://nexalabs.site)**: Flagship software publishing business & cloud infrastructure.
+  - **[DoneThat: Sync](https://donethat.online)**: Real-time mobile task sync with WebSockets and PostgreSQL.
+  - **[Bible Words: Play](https://play.lolaschools.com)**: 10k+ concurrent players, 99.9% uptime, AWS CloudFront.
+  - **[LOLA - JAMB & WAEC Prep](https://lolaschools.com)**: National exam preparation platform with 65% faster live transmission.
   - **SynOption**, **LifeApp**, **BioCatlog**, **ProDevs**, **GidiJobs**, **Bethesda Child Support Foundation**.
 - **Four Core Engineering Pillars**:
   - Backend & Data, Web & Mobile, Cloud & DevOps, Architecture & Patterns.

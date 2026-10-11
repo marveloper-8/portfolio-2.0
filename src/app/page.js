@@ -57,7 +57,6 @@ const INITIAL_WHITE_PATH = buildBulgePath(0.5, 0.5, BASE_R_WHITE, -Math.PI / 2, 
 const INITIAL_PHOTO_PATH = buildBulgePath(0.5, 0.5, BASE_R_PHOTO, -Math.PI / 2, 0.055);
 
 export default function Home() {
-  const [filter, setFilter] = useState('all');
   const [isCvModalOpen, setIsCvModalOpen] = useState(false);
   const [toast, setToast] = useState(null);
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
@@ -77,6 +76,8 @@ export default function Home() {
   const avatarPhotoPathRef = useRef(null);
   const avatarTooltipRef = useRef(null);
   const navAvatarSlotRef = useRef(null);
+  const headerRef = useRef(null);
+  const drawerRef = useRef(null);
 
   // Measure hero square matching Alata font metrics
   const measureHeroSquare = () => {
@@ -132,25 +133,33 @@ export default function Home() {
       const anchor = avatarAnchorRef.current;
       const slot = navAvatarSlotRef.current;
       const wrap = avatarWrapRef.current;
+      const isMobileNav = typeof window !== 'undefined' && window.innerWidth <= 768;
 
-      const TARGET_SLOT_SIZE = 38;
-      const TARGET_SLOT_MARGIN = 10;
-      const BASE_NAV_MAX_W = 720;
-      const EXPANDED_NAV_MAX_W = 780;
+      // Exact same height as the Let's Talk button (36px)
+      const TARGET_SLOT_SIZE = 36;
+      const TARGET_SLOT_MARGIN = 8;
+      const BASE_NAV_MAX_W = 560;
+      const EXPANDED_NAV_MAX_W = 620;
 
-      // The navbar expands slowly as the image circle moves towards it until it settles
+      // Inside the navigation container: expands smoothly as avatar settles
       if (slot) {
         const currentSlotW = dockEase * TARGET_SLOT_SIZE;
-        const currentSlotMargin = dockEase * TARGET_SLOT_MARGIN;
         slot.style.width = `${currentSlotW.toFixed(2)}px`;
         slot.style.height = `${TARGET_SLOT_SIZE}px`;
-        slot.style.marginLeft = `${currentSlotMargin.toFixed(2)}px`;
         slot.style.opacity = dockEase > 0.01 ? (dockEase * 1.0).toFixed(3) : '0';
         slot.style.pointerEvents = dockEase > 0.8 ? 'auto' : 'none';
+
+        if (isMobileNav) {
+          slot.style.marginRight = `${(dockEase * TARGET_SLOT_MARGIN).toFixed(2)}px`;
+          slot.style.marginLeft = '0px';
+        } else {
+          slot.style.marginLeft = `${(dockEase * TARGET_SLOT_MARGIN).toFixed(2)}px`;
+          slot.style.marginRight = '0px';
+        }
       }
 
       const pill = slot ? slot.closest('.nav-pill') : null;
-      if (pill) {
+      if (pill && !isMobileNav) {
         const currentNavMaxW = BASE_NAV_MAX_W + dockEase * (EXPANDED_NAV_MAX_W - BASE_NAV_MAX_W);
         pill.style.maxWidth = `${currentNavMaxW.toFixed(1)}px`;
       }
@@ -202,7 +211,7 @@ export default function Home() {
         const ty = currentCenterY - 77;
 
         wrap.style.transform = `translate3d(${tx.toFixed(2)}px, ${ty.toFixed(2)}px, 0) scale(${renderedScale.toFixed(4)})`;
-        wrap.style.zIndex = '60';
+        wrap.style.zIndex = '110';
 
         if (dockEase >= 0.95) {
           wrap.classList.add('docked');
@@ -228,8 +237,16 @@ export default function Home() {
       targetAngle = Math.atan2(dy, dx);
 
       // 3. Bulge and hover calculations
+      const isMobileScreen = typeof window !== 'undefined' && window.innerWidth <= 768;
       const hitRadius = currentAvatarRadius * (isHovered ? 1.25 : 1.0) + (dockEase > 0.8 ? 5 : 2);
-      if (dist <= hitRadius) {
+      if (isMobileScreen) {
+        targetBulge = 0;
+        currentBulge = 0;
+        targetBubbleOpacity = 0;
+        currentBubbleOpacity = 0;
+        isHovered = false;
+        setIsAvatarHovered(false);
+      } else if (dist <= hitRadius) {
         // Pointer is on the avatar
         targetBulge = 0; // perfect circle
         targetBubbleOpacity = 1.0;
@@ -365,45 +382,45 @@ CORE SKILLS:
 - Architecture: Microservices, GraphQL Federation, Event-Driven, DDD, Offline-First Architecture
 
 PROFESSIONAL EXPERIENCE:
-NexaLabs LTD (Jun 2026 – Present)
+NexaLabs LTD (Jun 2026 - Present)
 Owner & Software Engineer (Mobile, Web, & Backend)
 - Launched multiple digital products from initial idea to public release by directing the technical strategy and development for a software publishing business.
 - Ensured reliable system performance by architecting complete systems that connect mobile and web interfaces to secure cloud infrastructure.
 - Environment: Golang, TypeScript, NestJS, React Native, Next.js, Docker, Cloudflare, AWS, Python (https://nexalabs.site)
 
-DoneThat: Sync (Feb 2026 – Present)
+DoneThat: Sync (Feb 2026 - Present)
 Owner & Software Engineer (Mobile, Web, & Backend)
 - Enabled instant cross-device synchronization of household tasks by building a real-time React Native mobile application.
 - Eliminated data delays and manual refreshes by designing a fast, reliable server backend with WebSockets and PostgreSQL.
 - Environment: React Native, Golang, WebSockets, PostgreSQL, Coolify, AWS, Docker (https://donethat.online)
 
-Bible Words: Play (Aug 2025 – Present)
+Bible Words: Play (Aug 2025 - Present)
 Owner & Software Engineer (Mobile, Web, & Backend)
 - Maintained 99.9% uptime for 10,000+ concurrent players by engineering a highly reliable backend server system.
 - Accelerated global game load times by 40% by provisioning optimized cloud infrastructure on AWS.
 - Environment: React Native, Golang, Docker, AWS S3, AWS CloudFront, Python (https://play.lolaschools.com)
 
-LOLA - JAMB & WAEC PREP (Sep 2024 – Aug 2025)
+LOLA - JAMB & WAEC PREP (Sep 2024 - Aug 2025)
 Owner & Software Engineer (Mobile, Web, & Backend)
 - Facilitated national exam success for over 90% of enrolled students by leading the technology strategy for the educational platform.
 - Accelerated live message and video transmission by 65% by upgrading the real-time tutoring architecture.
 - Environment: React Native, Node.js, JSON APIs, WebSockets, PostgreSQL, Python, Docker (https://lolaschools.com)
 
-LifeApp (Mar 2024 – May 2024)
+LifeApp (Mar 2024 - May 2024)
 Backend & Cloud Engineer (Contract)
 - Processed 1 million+ daily user actions with a 60% increase in application speed by designing a scalable server system.
 - Increased new feature launch speed by 50% by automating the backend CI/CD release pipeline.
 - Environment: Go, Python, AWS (EKS), CI/CD, Kubernetes
 
-BioCatlog (Aug 2022 – Mar 2023)
+BioCatlog (Aug 2022 - Mar 2023)
 Senior Software Engineer (Mobile, Web, & Backend)
 - Supported 50,000+ daily active users by managing the end-to-end development of a high-traffic web application.
 - Boosted application speed by 70% for end-users by optimizing data retrieval operations via Redis and GraphQL.
 - Environment: React, Next.js, Node.js, GraphQL, Redis, Docker, Python
 
 EDUCATION:
-- BSc, Computer Science – Southwestern University (2024)
-- Diploma in Software Development & Digital Design – Ekobits Academy (2019)`;
+- BSc, Computer Science - Southwestern University (2024)
+- Diploma in Software Development & Digital Design - Ekobits Academy (2019)`;
 
     handleCopy(text, 'ATS Plain Text Resume');
   };
@@ -504,7 +521,7 @@ EDUCATION:
       desc: 'Scalable cloud infrastructure handling over 1 million daily user actions with zero bottlenecks. Automated deployment cycles and optimized high-throughput database queries.',
       badge: '🚀 1M+ Daily Actions',
       tech: ['Go (Golang)', 'Python', 'AWS EKS', 'Kubernetes', 'CI/CD Pipelines'],
-      liveUrl: 'https://github.com/marveloper-8',
+      liveUrl: null,
       githubUrl: 'https://github.com/marveloper-8'
     },
     {
@@ -516,7 +533,7 @@ EDUCATION:
       desc: 'High-traffic search and biological catalog platform supporting 50,000+ daily active users with complex relational queries and sub-second rendering.',
       badge: '📊 50k+ Daily Users',
       tech: ['Next.js', 'React', 'Node.js', 'GraphQL', 'Redis', 'Docker'],
-      liveUrl: 'https://github.com/marveloper-8',
+      liveUrl: null,
       githubUrl: 'https://github.com/marveloper-8'
     },
     {
@@ -528,18 +545,10 @@ EDUCATION:
       desc: 'High-stakes web trading terminal processing multi-million dollar institutional transactions with real-time order books, minimal bundle footprint, and hardened data integrity.',
       badge: '💳 $10M+ Daily Volume',
       tech: ['React', 'TypeScript', 'Redux', 'Financial WebSockets', 'Tailwind CSS'],
-      liveUrl: 'https://github.com/marveloper-8',
+      liveUrl: 'https://synoption.com',
       githubUrl: 'https://github.com/marveloper-8'
     }
   ];
-
-  const filteredFlagships = filter === 'all'
-    ? flagshipProjects
-    : flagshipProjects.filter((p) => p.category === filter);
-
-  const filteredSecondaries = filter === 'all'
-    ? secondaryProjects
-    : secondaryProjects.filter((p) => p.category === filter);
 
   return (
     <>
@@ -566,40 +575,35 @@ EDUCATION:
       {/* ========================================================
            FLOATING MINIMALIST NAVIGATION BAR (GLASS UI)
            ======================================================== */}
-      <header className="site-header">
+      <header className="site-header" ref={headerRef}>
         <nav className="nav-pill">
-          {/* Left: Brand Logo Mark with miniature tilting square */}
-          <a href="#hero" className="nav-brand" aria-label="Joshua Samuel Equere Home">
-            <span className="nav-brand-first">joshua</span>
-            <span className="nav-brand-last">equere</span>
-            <span className="nav-mini-square"></span>
-          </a>
-
-          {/* Center: Clean Nav Links */}
+          {/* Navigation links (on desktop: placed on the left) */}
           <div className="nav-links">
-            <a href="#stuffibuilt">Work</a>
+            <a href="#pastwork">Work</a>
             <a href="#disciplines">Disciplines</a>
             <a href="#timeline">Career</a>
             <a href="#resume" onClick={(e) => { e.preventDefault(); setIsCvModalOpen(true); }}>CV/Resume</a>
           </div>
 
-          {/* Right: Actions */}
+          {/* Action items: on mobile, avatar and Let's Talk are on the left, hamburger on the right */}
           <div className="nav-actions">
-            <a href="#contact" className="btn-pill-primary">
-              <span>Let&apos;s Talk</span>
-              <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.4" strokeLinecap="round" strokeLinejoin="round">
-                <line x1="12" y1="5" x2="12" y2="19" />
-                <polyline points="19 12 12 19 5 12" />
-              </svg>
-            </a>
+            <div className="nav-actions-left">
+              {/* Target Docking Slot for Animated Profile Avatar (inside the nav container) */}
+              <div
+                ref={navAvatarSlotRef}
+                className="nav-avatar-slot"
+                onClick={() => setIsCvModalOpen(true)}
+                aria-label="Profile Avatar slot in navigation"
+              />
 
-            {/* Target Docking Slot for Animated Profile Avatar */}
-            <div
-              ref={navAvatarSlotRef}
-              className="nav-avatar-slot"
-              onClick={() => setIsCvModalOpen(true)}
-              aria-label="Profile Avatar slot in navigation"
-            />
+              <a href="#contact" className="btn-pill-primary">
+                <span>Let&apos;s Talk</span>
+                <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.4" strokeLinecap="round" strokeLinejoin="round">
+                  <line x1="12" y1="5" x2="12" y2="19" />
+                  <polyline points="19 12 12 19 5 12" />
+                </svg>
+              </a>
+            </div>
 
             {/* Mobile Hamburger Button */}
             <button
@@ -614,10 +618,10 @@ EDUCATION:
         </nav>
       </header>
 
-      {/* Mobile Drawer */}
+      {/* Mobile Drawer (close up to the nav, no dark backdrop) */}
       {isMobileMenuOpen && (
-        <div className="mobile-drawer">
-          <a href="#stuffibuilt" onClick={() => setIsMobileMenuOpen(false)}>Work</a>
+        <div className="mobile-drawer" ref={drawerRef}>
+          <a href="#pastwork" onClick={() => setIsMobileMenuOpen(false)}>Work</a>
           <a href="#disciplines" onClick={() => setIsMobileMenuOpen(false)}>Disciplines</a>
           <a href="#timeline" onClick={() => setIsMobileMenuOpen(false)}>Career</a>
           <a href="#resume" onClick={() => { setIsMobileMenuOpen(false); setIsCvModalOpen(true); }}>CV/Resume</a>
@@ -729,7 +733,7 @@ EDUCATION:
 
             {/* Direct & Minimalist Hero Statement */}
             <p className="hero-statement">
-              Senior Software Engineer &amp; Founder of <strong style={{ color: '#0a0a0a' }}>NexaLabs</strong>. I build complete digital products from start to finish — <strong style={{ color: '#0a0a0a' }}>mobile apps</strong>, <strong style={{ color: '#0a0a0a' }}>web platforms</strong>, <strong style={{ color: '#0a0a0a' }}>high-concurrency servers</strong>, and <strong style={{ color: '#0a0a0a' }}>scalable cloud infrastructure</strong>.
+              Senior Software Engineer &amp; Founder of <strong style={{ color: '#0a0a0a' }}>NexaLabs</strong>. I build complete digital products from start to finish: <strong style={{ color: '#0a0a0a' }}>mobile apps</strong>, <strong style={{ color: '#0a0a0a' }}>web platforms</strong>, <strong style={{ color: '#0a0a0a' }}>high-concurrency servers</strong>, and <strong style={{ color: '#0a0a0a' }}>scalable cloud infrastructure</strong>.
             </p>
 
             {/* Center-Aligned Action Buttons (Commented out per request) */}
@@ -809,53 +813,24 @@ EDUCATION:
         </section>
 
         {/* ========================================================
-             SELECTED WORKS SHOWCASE SECTION ("stuff i built")
+             SELECTED WORKS SHOWCASE SECTION ("past work")
              EXACT 4-PHASE CINEMATIC ANIMATIONS AS ON NEXALABS
              ======================================================== */}
-        <section id="stuffibuilt" className="section">
+        <section id="pastwork" className="section">
           <div className="container">
             <div className="section-head">
               <h2 className="section-title-anybody">
-                <span style={{ color: '#000000' }}>stuff</span>
-                <span style={{ color: '#676666' }}>i</span>
-                <span style={{ color: '#239C05' }}>built</span>
+                <span style={{ color: '#000000' }}>past</span>
+                <span style={{ color: '#239C05' }}>work</span>
               </h2>
               <p className="section-desc">
                 production platforms built from scratch. see how i architect, build, and deploy dual-platform mobile and web systems in the real world.
               </p>
             </div>
 
-            {/* Interactive Filter Pills */}
-            <div className="filter-bar">
-              <button
-                onClick={() => setFilter('all')}
-                className={`filter-pill ${filter === 'all' ? 'active' : ''}`}
-              >
-                All Projects
-              </button>
-              <button
-                onClick={() => setFilter('mobile')}
-                className={`filter-pill ${filter === 'mobile' ? 'active' : ''}`}
-              >
-                Mobile Apps
-              </button>
-              <button
-                onClick={() => setFilter('web')}
-                className={`filter-pill ${filter === 'web' ? 'active' : ''}`}
-              >
-                Web Platforms
-              </button>
-              <button
-                onClick={() => setFilter('backend')}
-                className={`filter-pill ${filter === 'backend' ? 'active' : ''}`}
-              >
-                Backend &amp; Cloud
-              </button>
-            </div>
-
             {/* 3 FLAGSHIP PROJECTS WITH EXACT CINEMATIC ANIMATIONS FROM NEXALABS */}
             <div className="flagship-list">
-              {filteredFlagships.map((project) => (
+              {flagshipProjects.map((project) => (
                 <ProjectCardCinematic
                   key={project.id}
                   id={project.id}
@@ -879,22 +854,11 @@ EDUCATION:
             </div>
 
             {/* SECONDARY ARCHITECTURAL SYSTEMS */}
-            <div className="section-head" style={{ marginTop: '20px', marginBottom: '24px' }}>
-              <h3 style={{ fontSize: '1.4rem', fontWeight: 800, color: '#0a0a0a', letterSpacing: '-0.02em' }}>
-                Additional Commercial Platforms &amp; Contracts
-              </h3>
-            </div>
-
-            <div className="secondary-projects-grid">
-              {filteredSecondaries.map((p) => (
+            <div className="secondary-projects-grid" style={{ marginTop: '36px' }}>
+              {secondaryProjects.map((p) => (
                 <div key={p.id} className="secondary-card">
                   <div>
-                    <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '14px' }}>
-                      <span className="flagship-id-badge">{p.categoryLabel}</span>
-                      <span className="flagship-metric-badge">{p.badge}</span>
-                    </div>
-
-                    <h4 style={{ fontSize: '1.3rem', fontWeight: 700, color: '#0a0a0a', marginBottom: '6px' }}>{p.title}</h4>
+                    <h4 className="secondary-card-title">{p.title}</h4>
                     <div style={{ fontSize: '13px', fontWeight: 600, color: '#239C05', marginBottom: '12px' }}>{p.tagline}</div>
                     <p style={{ fontSize: '13.5px', color: '#525252', lineHeight: '1.6', marginBottom: '18px' }}>{p.desc}</p>
                   </div>
@@ -945,29 +909,58 @@ EDUCATION:
 
             <div className="disciplines-grid">
               <div className="discipline-card">
-                <div className="discipline-number">01 / MOBILE</div>
+                <div className="discipline-header">
+                  <div className="discipline-icon-badge" aria-hidden="true">
+                    <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.2" strokeLinecap="round" strokeLinejoin="round">
+                      <rect x="5" y="2" width="14" height="20" rx="2" ry="2" />
+                      <line x1="12" y1="18" x2="12.01" y2="18" />
+                    </svg>
+                  </div>
+                  <div className="discipline-number">01 / MOBILE</div>
+                </div>
                 <h3 className="discipline-title">Mobile Engineering</h3>
                 <p className="discipline-desc">
-                  Offline-first applications using React Native for iOS &amp; Android. Real-time background sync, push notifications, and fast touch responsiveness.
+                  Offline-first applications using React Native &amp; Expo for iOS &amp; Android. Real-time background sync, push notifications, and fast touch responsiveness.
                 </p>
                 <div className="discipline-tags">
-                  React Native • Redux • WebSockets • Offline-First
+                  React Native • Expo • Redux • WebSockets • Offline-First
                 </div>
               </div>
 
               <div className="discipline-card">
-                <div className="discipline-number">02 / WEB</div>
+                <div className="discipline-header">
+                  <div className="discipline-icon-badge" aria-hidden="true">
+                    <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.2" strokeLinecap="round" strokeLinejoin="round">
+                      <rect x="2" y="3" width="20" height="14" rx="2" ry="2" />
+                      <line x1="2" y1="7" x2="22" y2="7" />
+                      <circle cx="6" cy="5" r="0.75" fill="currentColor" />
+                      <circle cx="9" cy="5" r="0.75" fill="currentColor" />
+                      <circle cx="12" cy="5" r="0.75" fill="currentColor" />
+                    </svg>
+                  </div>
+                  <div className="discipline-number">02 / WEB</div>
+                </div>
                 <h3 className="discipline-title">Web &amp; Platforms</h3>
                 <p className="discipline-desc">
-                  High-performance web applications with Next.js &amp; React. Server-side rendering, sub-second TTFB, responsive accessibility, and 60+ FPS micro-interactions.
+                  High-performance web applications with Next.js, Svelte, &amp; React. Server-side rendering, sub-second TTFB, responsive accessibility, and 60+ FPS micro-interactions.
                 </p>
                 <div className="discipline-tags">
-                  Next.js • React • TypeScript • D3.js • Tailwind CSS
+                  Next.js • Svelte • React • TypeScript • D3.js • Tailwind CSS
                 </div>
               </div>
 
               <div className="discipline-card">
-                <div className="discipline-number">03 / BACKEND</div>
+                <div className="discipline-header">
+                  <div className="discipline-icon-badge" aria-hidden="true">
+                    <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.2" strokeLinecap="round" strokeLinejoin="round">
+                      <rect x="2" y="2" width="20" height="8" rx="2" ry="2" />
+                      <rect x="2" y="14" width="20" height="8" rx="2" ry="2" />
+                      <line x1="6" y1="6" x2="6.01" y2="6" />
+                      <line x1="6" y1="18" x2="6.01" y2="18" />
+                    </svg>
+                  </div>
+                  <div className="discipline-number">03 / BACKEND</div>
+                </div>
                 <h3 className="discipline-title">Distributed Backends</h3>
                 <p className="discipline-desc">
                   High-concurrency servers in Go (Golang), Python, and NestJS. Real-time bidirectional WebSockets, Kafka/RabbitMQ brokers, and low-latency PostgreSQL/Redis caching.
@@ -978,7 +971,14 @@ EDUCATION:
               </div>
 
               <div className="discipline-card">
-                <div className="discipline-number">04 / CLOUD</div>
+                <div className="discipline-header">
+                  <div className="discipline-icon-badge" aria-hidden="true">
+                    <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.2" strokeLinecap="round" strokeLinejoin="round">
+                      <path d="M18 10h-1.26A8 8 0 1 0 9 20h9a5 5 0 0 0 0-10z" />
+                    </svg>
+                  </div>
+                  <div className="discipline-number">04 / CLOUD</div>
+                </div>
                 <h3 className="discipline-title">Cloud &amp; DevOps</h3>
                 <p className="discipline-desc">
                   Automated CI/CD pipelines and infrastructure provisioning on AWS (EKS, S3, CloudFront). Docker containerization, Kubernetes clusters, and Terraform.
@@ -1011,7 +1011,7 @@ EDUCATION:
                 <div className="timeline-dot" />
                 <div className="timeline-meta-row">
                   <span className="timeline-company">NexaLabs LTD</span>
-                  <span className="timeline-date">Jun 2026 – Present</span>
+                  <span className="timeline-date">Jun 2026 - Present</span>
                 </div>
                 <div className="timeline-role">Owner &amp; Senior Software Engineer (Mobile, Web, &amp; Backend)</div>
                 <ul className="timeline-bullets">
@@ -1025,7 +1025,7 @@ EDUCATION:
                 <div className="timeline-dot" />
                 <div className="timeline-meta-row">
                   <span className="timeline-company">DoneThat: Sync</span>
-                  <span className="timeline-date">Feb 2026 – Present</span>
+                  <span className="timeline-date">Feb 2026 - Present</span>
                 </div>
                 <div className="timeline-role">Owner &amp; Lead Engineer (Mobile &amp; Backend)</div>
                 <ul className="timeline-bullets">
@@ -1039,7 +1039,7 @@ EDUCATION:
                 <div className="timeline-dot" />
                 <div className="timeline-meta-row">
                   <span className="timeline-company">Bible Words: Play</span>
-                  <span className="timeline-date">Aug 2025 – Present</span>
+                  <span className="timeline-date">Aug 2025 - Present</span>
                 </div>
                 <div className="timeline-role">Owner &amp; Software Engineer</div>
                 <ul className="timeline-bullets">
@@ -1053,7 +1053,7 @@ EDUCATION:
                 <div className="timeline-dot" />
                 <div className="timeline-meta-row">
                   <span className="timeline-company">LOLA - JAMB &amp; WAEC PREP</span>
-                  <span className="timeline-date">Sep 2024 – Aug 2025</span>
+                  <span className="timeline-date">Sep 2024 - Aug 2025</span>
                 </div>
                 <div className="timeline-role">Owner &amp; Software Engineer (Mobile, Web, &amp; Backend)</div>
                 <ul className="timeline-bullets">
@@ -1067,7 +1067,7 @@ EDUCATION:
                 <div className="timeline-dot" />
                 <div className="timeline-meta-row">
                   <span className="timeline-company">LifeApp</span>
-                  <span className="timeline-date">Mar 2024 – May 2024</span>
+                  <span className="timeline-date">Mar 2024 - May 2024</span>
                 </div>
                 <div className="timeline-role">Backend &amp; Cloud Engineer (Contract)</div>
                 <ul className="timeline-bullets">
@@ -1081,14 +1081,14 @@ EDUCATION:
                 <div className="timeline-dot" />
                 <div className="timeline-meta-row">
                   <span className="timeline-company">SynOption</span>
-                  <span className="timeline-date">Sep 2021 – Aug 2022</span>
+                  <span className="timeline-date">Sep 2021 - Aug 2022</span>
                 </div>
                 <div className="timeline-role">Web Engineer</div>
                 <ul className="timeline-bullets">
                   <li>Secured $10 million+ in daily transactions by helping build a robust financial trading platform.</li>
                   <li>Broadened accessibility for users on slow connections by shrinking the application download size by 60%.</li>
                 </ul>
-                <div className="timeline-env">Environment: React, TypeScript, Redux, Tailwind CSS</div>
+                <div className="timeline-env">Environment: React, TypeScript, Redux, Tailwind CSS • <a href="https://synoption.com" target="_blank" rel="noopener noreferrer" style={{ color: '#239C05', fontWeight: 600 }}>synoption.com</a></div>
               </div>
             </div>
           </div>
@@ -1105,7 +1105,7 @@ EDUCATION:
               <span style={{ color: '#239C05' }}>touch</span>
             </h2>
             <p className="section-desc" style={{ margin: '0 auto 36px auto' }}>
-              have a project, role, or architecture challenge? reach out directly or drop an email inquiry.
+              have a project, role, or architecture challenge? reach out directly below. inquiries go straight to <strong style={{ color: '#0a0a0a' }}>josh.sam.builds@gmail.com</strong>.
             </p>
 
             <form onSubmit={handleContactSubmit} style={{ textAlign: 'left', display: 'flex', flexDirection: 'column', gap: '14px' }}>
@@ -1181,7 +1181,7 @@ EDUCATION:
           </div>
 
           <div className="footer-copy">
-            &copy; 2026 Joshua Samuel Equere. All rights reserved. Built with Next.js &amp; NexaLabs minimalist design.
+            &copy; 2026 Joshua Samuel Equere. All rights reserved.
           </div>
         </div>
       </footer>
@@ -1193,7 +1193,7 @@ EDUCATION:
         <div className="modal-overlay" onClick={() => setIsCvModalOpen(false)}>
           <div className="modal-content" onClick={(e) => e.stopPropagation()}>
             <div className="modal-header-bar">
-              <span className="modal-title">Official Resume — Joshua Samuel Equere</span>
+              <span className="modal-title">Official Resume | Joshua Samuel Equere</span>
               <div className="modal-actions">
                 <a
                   href="/resume.pdf"

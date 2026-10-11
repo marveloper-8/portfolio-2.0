@@ -29,7 +29,7 @@ export default function CvDocument({ isModal = false }) {
             <strong>Backend &amp; Data:</strong> Go (Golang), Python, Node.js, Nest.js, Express.js, Redis, MySQL, PostgreSQL, MongoDB, Pub/Sub, Kafka, RabbitMQ
           </div>
           <div className="cv-skill-line">
-            <strong>Web &amp; Mobile:</strong> React, Next.js, React Native, Redux, D3.js, Tailwind CSS, WebSockets, Rest APIs
+            <strong>Web &amp; Mobile:</strong> React, Next.js, Svelte, React Native, Expo, Redux, D3.js, Tailwind CSS, WebSockets, Rest APIs
           </div>
           <div className="cv-skill-line">
             <strong>Cloud &amp; DevOps:</strong> AWS (EKS, S3, CloudFront), Docker, Kubernetes, Terraform, Ansible, GitHub Actions, Jenkins, CI/CD, Automated Testing Frameworks (Cypress, Playwright)
@@ -48,7 +48,7 @@ export default function CvDocument({ isModal = false }) {
         <div className="cv-job">
           <div className="cv-job-header">
             <span className="cv-job-company">NexaLabs LTD</span>
-            <span className="cv-job-date">Jun 2026 – Present</span>
+            <span className="cv-job-date">Jun 2026 - Present</span>
           </div>
           <div className="cv-job-title">Owner &amp; Software Engineer (Mobile, Web, &amp; Backend)</div>
           <ul className="cv-job-bullets">
@@ -64,7 +64,7 @@ export default function CvDocument({ isModal = false }) {
         <div className="cv-job">
           <div className="cv-job-header">
             <span className="cv-job-company">DoneThat: Sync</span>
-            <span className="cv-job-date">Feb 2026 – Present</span>
+            <span className="cv-job-date">Feb 2026 - Present</span>
           </div>
           <div className="cv-job-title">Owner &amp; Software Engineer (Mobile, Web, &amp; Backend)</div>
           <ul className="cv-job-bullets">
@@ -80,7 +80,7 @@ export default function CvDocument({ isModal = false }) {
         <div className="cv-job">
           <div className="cv-job-header">
             <span className="cv-job-company">Bible Words: Play</span>
-            <span className="cv-job-date">Aug 2025 – Present</span>
+            <span className="cv-job-date">Aug 2025 - Present</span>
           </div>
           <div className="cv-job-title">Owner &amp; Software Engineer (Mobile, Web, &amp; Backend)</div>
           <ul className="cv-job-bullets">
@@ -95,8 +95,8 @@ export default function CvDocument({ isModal = false }) {
         {/* LOLA */}
         <div className="cv-job">
           <div className="cv-job-header">
-            <span className="cv-job-company">LOLA — JAMB &amp; WAEC PREP</span>
-            <span className="cv-job-date">Sep 2024 – Aug 2025</span>
+            <span className="cv-job-company">LOLA - JAMB &amp; WAEC PREP</span>
+            <span className="cv-job-date">Sep 2024 - Aug 2025</span>
           </div>
           <div className="cv-job-title">Owner &amp; Software Engineer (Mobile, Web, &amp; Backend)</div>
           <ul className="cv-job-bullets">
@@ -117,7 +117,7 @@ export default function CvDocument({ isModal = false }) {
         <div className="cv-job">
           <div className="cv-job-header">
             <span className="cv-job-company">LifeApp</span>
-            <span className="cv-job-date">Mar 2024 – May 2024</span>
+            <span className="cv-job-date">Mar 2024 - May 2024</span>
           </div>
           <div className="cv-job-title">Backend &amp; Cloud Engineer (Contract)</div>
           <ul className="cv-job-bullets">
@@ -133,7 +133,7 @@ export default function CvDocument({ isModal = false }) {
         <div className="cv-job">
           <div className="cv-job-header">
             <span className="cv-job-company">BioCatlog</span>
-            <span className="cv-job-date">Aug 2022 – Mar 2023</span>
+            <span className="cv-job-date">Aug 2022 - Mar 2023</span>
           </div>
           <div className="cv-job-title">Senior Software Engineer (Mobile, Web, &amp; Backend)</div>
           <ul className="cv-job-bullets">
@@ -149,7 +149,7 @@ export default function CvDocument({ isModal = false }) {
         <div className="cv-job">
           <div className="cv-job-header">
             <span className="cv-job-company">SynOption</span>
-            <span className="cv-job-date">Sep 2021 – Aug 2022</span>
+            <span className="cv-job-date">Sep 2021 - Aug 2022</span>
           </div>
           <div className="cv-job-title">Web Engineer</div>
           <ul className="cv-job-bullets">
@@ -157,7 +157,7 @@ export default function CvDocument({ isModal = false }) {
             <li>Broadened accessibility for users on slow connections by shrinking the mobile application's download size by 60%.</li>
           </ul>
           <div className="cv-job-env">
-            Environment: React, TypeScript, Redux, Tailwind CSS
+            Environment: React, TypeScript, Redux, Tailwind CSS • <a href="https://synoption.com" target="_blank" rel="noopener noreferrer">https://synoption.com</a>
           </div>
         </div>
 
@@ -165,7 +165,7 @@ export default function CvDocument({ isModal = false }) {
         <div className="cv-job">
           <div className="cv-job-header">
             <span className="cv-job-company">ProDevs</span>
-            <span className="cv-job-date">Sep 2020 – Aug 2021</span>
+            <span className="cv-job-date">Sep 2020 - Aug 2021</span>
           </div>
           <div className="cv-job-title">Software Engineer (Mobile &amp; Web)</div>
           <ul className="cv-job-bullets">
@@ -182,7 +182,7 @@ export default function CvDocument({ isModal = false }) {
         <div className="cv-job">
           <div className="cv-job-header">
             <span className="cv-job-company">GidiJobs</span>
-            <span className="cv-job-date">Sep 2019 – Jul 2020</span>
+            <span className="cv-job-date">Sep 2019 - Jul 2020</span>
           </div>
           <div className="cv-job-title">Software Engineer (Web)</div>
           <ul className="cv-job-bullets">
@@ -197,7 +197,7 @@ export default function CvDocument({ isModal = false }) {
         <div className="cv-job">
           <div className="cv-job-header">
             <span className="cv-job-company">Bethesda Child Support Foundation</span>
-            <span className="cv-job-date">Jan 2018 – Jun 2018</span>
+            <span className="cv-job-date">Jan 2018 - Jun 2018</span>
           </div>
           <div className="cv-job-title">Software Engineer Intern (Web)</div>
           <ul className="cv-job-bullets">
@@ -215,10 +215,10 @@ export default function CvDocument({ isModal = false }) {
         <h2 className="cv-section-heading">EDUCATION</h2>
         <div className="cv-edu-row">
           <div className="cv-edu-item">
-            <strong>BSc, Computer Science</strong> – Southwestern University (2024)
+            <strong>BSc, Computer Science</strong> - Southwestern University (2024)
           </div>
           <div className="cv-edu-item">
-            <strong>Diploma in Software Development &amp; Digital Design</strong> – Ekobits Academy (2019)
+            <strong>Diploma in Software Development &amp; Digital Design</strong> - Ekobits Academy (2019)
           </div>
         </div>
       </div>

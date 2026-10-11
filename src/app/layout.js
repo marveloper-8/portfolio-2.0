@@ -2,7 +2,7 @@ import "./globals.css";
 
 export const metadata = {
   metadataBase: new URL('https://nexalabs.site'),
-  title: "Joshua Samuel Equere — Senior Software Engineer",
+  title: "Joshua Samuel Equere | Senior Software Engineer",
   description: "Senior Software Engineer specializing in mobile apps, web platforms, high-concurrency servers (Go, Python), and cloud architecture (AWS). Founder of NexaLabs.",
   keywords: [
     "Joshua Samuel Equere",
@@ -17,7 +17,7 @@ export const metadata = {
   ],
   authors: [{ name: "Joshua Samuel Equere" }],
   openGraph: {
-    title: "Joshua Samuel Equere — Senior Software Engineer",
+    title: "Joshua Samuel Equere | Senior Software Engineer",
     description: "Building complete digital products from start to finish. Mobile apps, web platforms, robust servers, and scalable cloud infrastructure.",
     url: "https://nexalabs.site",
     siteName: "Joshua Samuel Equere",

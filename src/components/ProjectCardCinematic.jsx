@@ -329,43 +329,6 @@ export default function ProjectCardCinematic({
             {desc}
           </p>
 
-          {/* Direct Web & App Live Links Matching NexaLabs */}
-          {(webUrl || appUrl) && (
-            <div style={{ display: 'flex', flexWrap: 'wrap', alignItems: 'center', gap: '8px', paddingTop: '2px' }}>
-              {webUrl && (
-                <a
-                  href={webUrl}
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  className="project-link-pill"
-                  title="Visit website"
-                >
-                  <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.2" strokeLinecap="round" strokeLinejoin="round">
-                    <path d="M10 13a5 5 0 0 0 7.54.54l3-3a5 5 0 0 0-7.07-7.07l-1.72 1.71" />
-                    <path d="M14 11a5 5 0 0 0-7.54-.54l-3 3a5 5 0 0 0 7.07 7.07l1.71-1.71" />
-                  </svg>
-                  <span>visit website</span>
-                </a>
-              )}
-
-              {appUrl && (
-                <a
-                  href={appUrl}
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  className="project-link-pill"
-                  title="See the iOS app"
-                >
-                  <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.2" strokeLinecap="round" strokeLinejoin="round">
-                    <path d="M10 13a5 5 0 0 0 7.54.54l3-3a5 5 0 0 0-7.07-7.07l-1.72 1.71" />
-                    <path d="M14 11a5 5 0 0 0-7.54-.54l-3 3a5 5 0 0 0 7.07 7.07l1.71-1.71" />
-                  </svg>
-                  <span>see the iOS app</span>
-                </a>
-              )}
-            </div>
-          )}
-
           {/* Capabilities chips */}
           {services && services.length > 0 && (
             <div style={{ display: 'flex', flexWrap: 'wrap', gap: '6px', paddingTop: '4px' }}>
@@ -378,29 +341,49 @@ export default function ProjectCardCinematic({
           )}
         </div>
 
-        {/* Direct Project CTA: "Build Yours ↗" */}
-        <div style={{ paddingTop: '8px' }}>
-          <a
-            href="#contact"
-            className="project-build-btn"
-          >
-            <span>Build Yours</span>
-            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round">
-              <line x1="7" y1="17" x2="17" y2="7" />
-              <polyline points="7 7 17 7 17 17" />
-            </svg>
-          </a>
-        </div>
+        {/* Action Buttons: Live Platform & iOS App Store */}
+        {(webUrl || appUrl) && (
+          <div className="project-card-actions">
+            {webUrl && (
+              <a
+                href={webUrl}
+                target="_blank"
+                rel="noopener noreferrer"
+                className="project-btn-primary"
+                title={`Visit ${name} live platform`}
+              >
+                <span>Live Platform</span>
+                <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.2" strokeLinecap="round" strokeLinejoin="round">
+                  <path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6" />
+                  <polyline points="15 3 21 3 21 9" />
+                  <line x1="10" y1="14" x2="21" y2="3" />
+                </svg>
+              </a>
+            )}
+
+            {appUrl && (
+              <a
+                href={appUrl}
+                target="_blank"
+                rel="noopener noreferrer"
+                className="project-btn-secondary"
+                title={`See ${name} on iOS App Store`}
+              >
+                <svg width="14" height="14" viewBox="0 0 24 24" fill="currentColor">
+                  <path d="M18.71 19.5c-.83 1.24-1.71 2.45-3.05 2.47-1.34.03-1.77-.79-3.29-.79-1.53 0-2 .77-3.27.82-1.31.05-2.3-1.32-3.14-2.53C4.25 17 2.94 12.45 4.7 9.39c.87-1.52 2.43-2.48 4.12-2.51 1.28-.02 2.5.87 3.29.87.78 0 2.26-1.07 3.81-.91.65.03 2.47.26 3.64 1.98-.09.06-2.17 1.28-2.15 3.81.03 3.02 2.65 4.03 2.68 4.04-.03.07-.42 1.44-1.38 2.83M15.97 6.37c.56-.69.95-1.66.84-2.63-.82.03-1.82.55-2.4 1.23-.52.59-.97 1.56-.85 2.5.92.07 1.85-.41 2.41-1.1z" />
+                </svg>
+                <span>iOS App Store</span>
+              </a>
+            )}
+          </div>
+        )}
       </div>
 
       {/* ========================================================
            RIGHT / EXPANSIVE SHOWCASE STAGE (Exact Aspect Ratio of NexaLabs)
            ======================================================== */}
       <div className="project-card-stage-col">
-        {/* Ambient Subtle Light Green Water Wave Aura */}
-        <div className="anim-green-aura" style={{ position: 'absolute', inset: '-6px', borderRadius: '30px', background: 'radial-gradient(circle, rgba(35, 156, 5, 0.12) 0%, transparent 70%)', filter: 'blur(16px)', pointerEvents: 'none', zIndex: 0 }} />
-
-        {/* Presentation Canvas Stage with full rounded border */}
+        {/* Presentation Canvas Stage with full rounded border (No green glow aura) */}
         <div
           className="anim-presentation-glow project-card-canvas-stage"
           style={{
