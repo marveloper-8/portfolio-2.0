@@ -46,7 +46,6 @@ export const metadata = {
       { url: "/favicon.ico", sizes: "any" }
     ],
     shortcut: "/favicon.ico",
-    apple: "/apple-icon.png",
   },
 };
 
@@ -54,6 +53,13 @@ export default function RootLayout({ children }) {
   return (
     <html lang="en">
       <head>
+        <meta property="og:image" content="https://nexalabs.site/og-image.jpg" />
+        <meta property="og:image:secure_url" content="https://nexalabs.site/og-image.jpg" />
+        <meta property="og:image:type" content="image/jpeg" />
+        <meta property="og:image:width" content="1200" />
+        <meta property="og:image:height" content="630" />
+        <meta property="og:image:alt" content="Joshua Equere | Senior Software Engineer" />
+        <meta name="twitter:image" content="https://nexalabs.site/og-image.jpg" />
         <link rel="preconnect" href="https://fonts.googleapis.com" />
         <link rel="preconnect" href="https://fonts.gstatic.com" crossOrigin="anonymous" />
         <link
