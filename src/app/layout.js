@@ -1,7 +1,7 @@
 import "./globals.css";
 
 export const metadata = {
-  metadataBase: new URL('https://nexalabs.site'),
+  metadataBase: new URL(process.env.NEXT_PUBLIC_SITE_URL || 'https://josh.trynexalabs.com'),
   title: "Joshua Equere | Senior Software Engineer",
   description: "i build scalable systems, ship clean apps, and let the code do the talking. senior software engineer & founder of nexalabs.",
   keywords: [
@@ -21,13 +21,15 @@ export const metadata = {
   openGraph: {
     title: "Joshua Equere | Senior Software Engineer",
     description: "i build scalable systems, ship clean apps, and let the code do the talking. senior software engineer & founder of nexalabs.",
-    url: "https://nexalabs.site",
+    url: "https://josh.trynexalabs.com",
     siteName: "Joshua Equere",
     images: [
       {
-        url: "/og-image.jpg",
+        url: "https://josh.trynexalabs.com/og-image.jpg",
+        secureUrl: "https://josh.trynexalabs.com/og-image.jpg",
         width: 1200,
         height: 630,
+        type: "image/jpeg",
         alt: "Joshua Equere | Senior Software Engineer",
       },
     ],
@@ -38,7 +40,7 @@ export const metadata = {
     card: "summary_large_image",
     title: "Joshua Equere | Senior Software Engineer",
     description: "i build scalable systems, ship clean apps, and let the code do the talking. senior software engineer & founder of nexalabs.",
-    images: ["/og-image.jpg"],
+    images: ["https://josh.trynexalabs.com/og-image.jpg"],
   },
   icons: {
     icon: "/favicon.ico",
@@ -50,13 +52,13 @@ export default function RootLayout({ children }) {
   return (
     <html lang="en">
       <head>
-        <meta property="og:image" content="https://nexalabs.site/og-image.jpg" />
-        <meta property="og:image:secure_url" content="https://nexalabs.site/og-image.jpg" />
+        <meta property="og:image" content="https://josh.trynexalabs.com/og-image.jpg" />
+        <meta property="og:image:secure_url" content="https://josh.trynexalabs.com/og-image.jpg" />
         <meta property="og:image:type" content="image/jpeg" />
         <meta property="og:image:width" content="1200" />
         <meta property="og:image:height" content="630" />
         <meta property="og:image:alt" content="Joshua Equere | Senior Software Engineer" />
-        <meta name="twitter:image" content="https://nexalabs.site/og-image.jpg" />
+        <meta name="twitter:image" content="https://josh.trynexalabs.com/og-image.jpg" />
         <link rel="preconnect" href="https://fonts.googleapis.com" />
         <link rel="preconnect" href="https://fonts.gstatic.com" crossOrigin="anonymous" />
         <link
