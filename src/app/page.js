@@ -133,6 +133,28 @@ export default function Home() {
       const slot = navAvatarSlotRef.current;
       const wrap = avatarWrapRef.current;
 
+      const TARGET_SLOT_SIZE = 38;
+      const TARGET_SLOT_MARGIN = 10;
+      const BASE_NAV_MAX_W = 720;
+      const EXPANDED_NAV_MAX_W = 780;
+
+      // The navbar expands slowly as the image circle moves towards it until it settles
+      if (slot) {
+        const currentSlotW = dockEase * TARGET_SLOT_SIZE;
+        const currentSlotMargin = dockEase * TARGET_SLOT_MARGIN;
+        slot.style.width = `${currentSlotW.toFixed(2)}px`;
+        slot.style.height = `${TARGET_SLOT_SIZE}px`;
+        slot.style.marginLeft = `${currentSlotMargin.toFixed(2)}px`;
+        slot.style.opacity = dockEase > 0.01 ? (dockEase * 1.0).toFixed(3) : '0';
+        slot.style.pointerEvents = dockEase > 0.8 ? 'auto' : 'none';
+      }
+
+      const pill = slot ? slot.closest('.nav-pill') : null;
+      if (pill) {
+        const currentNavMaxW = BASE_NAV_MAX_W + dockEase * (EXPANDED_NAV_MAX_W - BASE_NAV_MAX_W);
+        pill.style.maxWidth = `${currentNavMaxW.toFixed(1)}px`;
+      }
+
       let currentCenterX = 0;
       let currentCenterY = 0;
       let baseScale = 1.0;
@@ -140,34 +162,34 @@ export default function Home() {
 
       if (slot && wrap) {
         const slotRect = slot.getBoundingClientRect();
-        const x1 = slotRect.left + slotRect.width / 2;
-        const y1 = slotRect.top + slotRect.height / 2;
-
         const naturalDiameter = 154 * (2 * BASE_R_OUTER); // ~122px
-        const scale1 = slotRect.width / naturalDiameter; // ~0.2951
+        const scale1 = TARGET_SLOT_SIZE / naturalDiameter; // ~0.3115
 
         if (dockEase >= 1.0) {
           // ROCK-SOLID STATIONARY IN NAVBAR:
           // Center is locked strictly to slot center (no anchor dependency, zero scroll bobbing on other sections!)
-          currentCenterX = x1;
-          currentCenterY = y1;
+          currentCenterX = slotRect.left + slotRect.width / 2;
+          currentCenterY = slotRect.top + slotRect.height / 2;
           baseScale = scale1;
-          currentAvatarRadius = slotRect.width / 2;
+          currentAvatarRadius = TARGET_SLOT_SIZE / 2;
         } else if (anchor) {
           const anchorRect = anchor.getBoundingClientRect();
           const x0 = anchorRect.left + anchorRect.width / 2;
           const y0 = anchorRect.top + anchorRect.height / 2;
           const scale0 = anchorRect.width / 154;
 
-          currentCenterX = (1 - dockEase) * x0 + dockEase * x1;
-          currentCenterY = (1 - dockEase) * y0 + dockEase * y1;
+          const targetSlotCenterX = slotRect.left + (dockEase > 0.1 ? slotRect.width / 2 : TARGET_SLOT_SIZE / 2);
+          const targetSlotCenterY = slotRect.top + slotRect.height / 2;
+
+          currentCenterX = (1 - dockEase) * x0 + dockEase * targetSlotCenterX;
+          currentCenterY = (1 - dockEase) * y0 + dockEase * targetSlotCenterY;
           baseScale = (1 - dockEase) * scale0 + dockEase * scale1;
-          currentAvatarRadius = (1 - dockEase) * (anchorRect.width * BASE_R_OUTER) + dockEase * (slotRect.width / 2);
+          currentAvatarRadius = (1 - dockEase) * (anchorRect.width * BASE_R_OUTER) + dockEase * (TARGET_SLOT_SIZE / 2);
         } else {
-          currentCenterX = x1;
-          currentCenterY = y1;
+          currentCenterX = slotRect.left + slotRect.width / 2;
+          currentCenterY = slotRect.top + slotRect.height / 2;
           baseScale = scale1;
-          currentAvatarRadius = slotRect.width / 2;
+          currentAvatarRadius = TARGET_SLOT_SIZE / 2;
         }
 
         // Smooth expansion on hover (expands by 24% when docked, 6% in hero)
@@ -557,29 +579,17 @@ EDUCATION:
           <div className="nav-links">
             <a href="#stuffibuilt">Work</a>
             <a href="#disciplines">Disciplines</a>
-            <a href="#timeline">Journey</a>
-            <a href="#resume" onClick={(e) => { e.preventDefault(); setIsCvModalOpen(true); }}>Resume</a>
-            <a href="#contact">Contact</a>
+            <a href="#timeline">Career</a>
+            <a href="#resume" onClick={(e) => { e.preventDefault(); setIsCvModalOpen(true); }}>CV/Resume</a>
           </div>
 
           {/* Right: Actions */}
           <div className="nav-actions">
-            <button
-              onClick={() => setIsCvModalOpen(true)}
-              className="btn-pill-secondary"
-            >
-              <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.2" strokeLinecap="round" strokeLinejoin="round">
-                <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z" />
-                <polyline points="14 2 14 8 20 8" />
-              </svg>
-              <span>View Resume</span>
-            </button>
-
             <a href="#contact" className="btn-pill-primary">
               <span>Let&apos;s Talk</span>
-              <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.2" strokeLinecap="round" strokeLinejoin="round">
-                <path d="M7 17L17 7" />
-                <path d="M7 7h10v10" />
+              <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.4" strokeLinecap="round" strokeLinejoin="round">
+                <line x1="12" y1="5" x2="12" y2="19" />
+                <polyline points="19 12 12 19 5 12" />
               </svg>
             </a>
 
@@ -609,16 +619,8 @@ EDUCATION:
         <div className="mobile-drawer">
           <a href="#stuffibuilt" onClick={() => setIsMobileMenuOpen(false)}>Work</a>
           <a href="#disciplines" onClick={() => setIsMobileMenuOpen(false)}>Disciplines</a>
-          <a href="#timeline" onClick={() => setIsMobileMenuOpen(false)}>Career Journey</a>
-          <a href="#resume" onClick={() => { setIsMobileMenuOpen(false); setIsCvModalOpen(true); }}>Resume (PDF)</a>
-          <a href="#contact" onClick={() => setIsMobileMenuOpen(false)}>Contact</a>
-          <button
-            onClick={() => { setIsMobileMenuOpen(false); setIsCvModalOpen(true); }}
-            className="hero-btn-primary"
-            style={{ marginTop: '8px', justifyContent: 'center' }}
-          >
-            <span>Preview Resume PDF</span>
-          </button>
+          <a href="#timeline" onClick={() => setIsMobileMenuOpen(false)}>Career</a>
+          <a href="#resume" onClick={() => { setIsMobileMenuOpen(false); setIsCvModalOpen(true); }}>CV/Resume</a>
         </div>
       )}
 
@@ -730,7 +732,8 @@ EDUCATION:
               Senior Software Engineer &amp; Founder of <strong style={{ color: '#0a0a0a' }}>NexaLabs</strong>. I build complete digital products from start to finish — <strong style={{ color: '#0a0a0a' }}>mobile apps</strong>, <strong style={{ color: '#0a0a0a' }}>web platforms</strong>, <strong style={{ color: '#0a0a0a' }}>high-concurrency servers</strong>, and <strong style={{ color: '#0a0a0a' }}>scalable cloud infrastructure</strong>.
             </p>
 
-            {/* Center-Aligned Action Buttons */}
+            {/* Center-Aligned Action Buttons (Commented out per request) */}
+            {/*
             <div className="hero-actions">
               <a href="#stuffibuilt" className="hero-btn-primary">
                 <span>Explore Selected Work</span>
@@ -776,6 +779,7 @@ EDUCATION:
                 <span>Copy Email</span>
               </button>
             </div>
+            */}
 
             {/* Minimalist Stats Strip */}
             <div className="stats-strip">

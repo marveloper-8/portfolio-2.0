@@ -131,7 +131,7 @@ body {
   align-items: center;
   justify-content: space-between;
   width: 100%;
-  max-width: 920px;
+  max-width: 720px;
   padding: 10px 24px;
   border-radius: var(--radius-pill);
   background: linear-gradient(135deg, rgba(255, 255, 255, 0.78) 0%, rgba(255, 255, 255, 0.55) 100%);
@@ -139,7 +139,8 @@ body {
   -webkit-backdrop-filter: blur(20px) saturate(180%);
   border: 1px solid rgba(255, 255, 255, 0.85);
   box-shadow: 0 12px 40px rgba(0, 0, 0, 0.06), 0 0 0 1px rgba(255, 255, 255, 0.7) inset, 0 1px 2px rgba(255, 255, 255, 0.9) inset;
-  transition: all 0.25s ease;
+  transition: box-shadow 0.25s ease;
+  will-change: max-width;
 }
 
 .nav-brand {
@@ -210,7 +211,7 @@ body {
 .nav-actions {
   display: flex;
   align-items: center;
-  gap: 10px;
+  gap: 0px;
 }
 
 .btn-pill-primary {
@@ -257,16 +258,20 @@ body {
   border-color: #d4d4d8;
 }
 
-/* Nav Avatar Docking Slot (Where Hero Avatar Lands Upon Scroll) */
+/* Nav Avatar Docking Slot (Where Hero Avatar Lands Upon Scroll - Expands flexibly) */
 .nav-avatar-slot {
-  width: 36px;
-  height: 36px;
+  width: 0px;
+  height: 38px;
   border-radius: 50%;
-  margin-left: 6px;
+  margin-left: 0px;
   flex-shrink: 0;
   display: block;
   cursor: pointer;
   background: transparent;
+  overflow: hidden;
+  opacity: 0;
+  pointer-events: none;
+  box-sizing: border-box;
 }
 
 /* Mobile Hamburger */
