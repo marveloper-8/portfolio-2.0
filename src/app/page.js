@@ -56,6 +56,41 @@ const INITIAL_OUTER_PATH = buildBulgePath(0.5, 0.5, BASE_R_OUTER, -Math.PI / 2, 
 const INITIAL_WHITE_PATH = buildBulgePath(0.5, 0.5, BASE_R_WHITE, -Math.PI / 2, 0.055);
 const INITIAL_PHOTO_PATH = buildBulgePath(0.5, 0.5, BASE_R_PHOTO, -Math.PI / 2, 0.055);
 
+function SectionCvCta({ onPreview }) {
+  return (
+    <div className="section-cta-wrap">
+      <button
+        onClick={onPreview}
+        className="btn-section-cv-check"
+        title="Check my CV / Resume online"
+      >
+        <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.2" strokeLinecap="round" strokeLinejoin="round">
+          <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z" />
+          <polyline points="14 2 14 8 20 8" />
+          <line x1="16" y1="13" x2="8" y2="13" />
+          <line x1="16" y1="17" x2="8" y2="17" />
+        </svg>
+        <span>Check my CV/Resume</span>
+      </button>
+
+      <a
+        href="/resume.pdf"
+        download="Joshua_Samuel_Equere_CV.pdf"
+        className="btn-section-cv-download"
+        title="Download Joshua Samuel Equere's CV / Resume"
+        aria-label="Download CV/Resume PDF"
+      >
+        <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.2" strokeLinecap="round" strokeLinejoin="round">
+          <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4" />
+          <polyline points="7 10 12 15 17 10" />
+          <line x1="12" y1="15" x2="12" y2="3" />
+        </svg>
+        <span className="btn-download-text">Download</span>
+      </a>
+    </div>
+  );
+}
+
 export default function Home() {
   const [isCvModalOpen, setIsCvModalOpen] = useState(false);
   const [toast, setToast] = useState(null);
@@ -805,6 +840,8 @@ EDUCATION:
               </div>
             </div>
 
+            {/* Resume Download CTA (Hero - directly after Latency Reduction) */}
+            <SectionCvCta onPreview={() => setIsCvModalOpen(true)} />
           </div>
         </section>
 
@@ -885,6 +922,8 @@ EDUCATION:
               ))}
             </div>
 
+            {/* Resume Download CTA (Past Work) */}
+            <SectionCvCta onPreview={() => setIsCvModalOpen(true)} />
           </div>
         </section>
 
@@ -984,6 +1023,9 @@ EDUCATION:
                 </div>
               </div>
             </div>
+
+            {/* Resume Download CTA (Disciplines) */}
+            <SectionCvCta onPreview={() => setIsCvModalOpen(true)} />
           </div>
         </section>
 
@@ -1087,6 +1129,9 @@ EDUCATION:
                 <div className="timeline-env">Environment: React, TypeScript, Redux, Tailwind CSS • <a href="https://synoption.com" target="_blank" rel="noopener noreferrer" style={{ color: '#239C05', fontWeight: 600 }}>synoption.com</a></div>
               </div>
             </div>
+
+            {/* Resume Download CTA (Career Journey) */}
+            <SectionCvCta onPreview={() => setIsCvModalOpen(true)} />
           </div>
         </section>
 
