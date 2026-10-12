@@ -168,6 +168,41 @@ export default function CurtainLoader({
   const DAMPING = 0.965;
   const GROMMET_SPACING = 6;
 
+  const propsRef = useRef({ squareSize, borderWidth, targetSelector });
+  propsRef.current = { squareSize, borderWidth, targetSelector };
+
+  // Responsive fallback square metrics
+  const getInitialLoaderMetrics = () => {
+    if (typeof window === 'undefined') return { size: 35, border: 9 };
+    const currentSelector = propsRef.current.targetSelector || targetSelector;
+    const sqWrapperEl = document.querySelector('#landing-brand-square');
+    const sqEl = document.querySelector(currentSelector)
+      || document.querySelector('#landing-brand-square-inner')
+      || sqWrapperEl;
+    if (sqEl) {
+      const cs = window.getComputedStyle(sqEl);
+      let domWidth = 0;
+      if (sqWrapperEl && sqWrapperEl.getBoundingClientRect().width > 0) {
+        domWidth = sqWrapperEl.getBoundingClientRect().width;
+      } else if (parseFloat(cs.width) > 0) {
+        domWidth = parseFloat(cs.width);
+      }
+      const domBorder = parseFloat(cs.borderTopWidth) || parseFloat(cs.borderWidth);
+      if (domWidth > 0 && domBorder > 0) {
+        return { size: domWidth, border: domBorder };
+      }
+    }
+    const w = window.innerWidth;
+    const isMobile = w < 640;
+    const fs = w < 400 ? 28 : (isMobile ? 32 : (w < 768 ? 68 : (w < 1024 ? 92 : 115)));
+    const ratio = isMobile ? 0.35 : 0.31;
+    const size = Math.max(10, Math.round(fs * ratio));
+    const border = Math.max(2, Math.round(fs * (isMobile ? 0.085 : 0.082)));
+    return { size, border };
+  };
+
+  const initialMetrics = getInitialLoaderMetrics();
+
   const stateRef = useRef({
     points: [],
     links: [],
@@ -191,8 +226,8 @@ export default function CurtainLoader({
       lastX: -100,
       lastY: 0,
       angle: 0,
-      outerSize: 38.4,
-      strokeWidth: 10.5,
+      outerSize: initialMetrics.size,
+      strokeWidth: initialMetrics.border,
       floorY: 0,
       targetLogoX: 0,
       targetLogoY: 0,
@@ -205,33 +240,57 @@ export default function CurtainLoader({
     const canvas = canvasRef.current;
     if (!canvas) return;
     const canvasRect = canvas.getBoundingClientRect();
-    const squareInnerEl = document.querySelector(targetSelector)
+    const currentSelector = propsRef.current.targetSelector || targetSelector;
+    const sqWrapperEl = document.querySelector('#landing-brand-square');
+    const squareInnerEl = document.querySelector(currentSelector)
       || document.querySelector('#landing-brand-square-inner')
-      || document.querySelector('#landing-brand-square');
-    const brandTextEl = document.querySelector('.hero-brand-text')
-      || document.querySelector('#landing-brand-s');
+      || sqWrapperEl;
+    const brandTextEl = document.querySelector('.hero-brand-text');
+    const letterEl = document.querySelector('#landing-brand-s') || document.querySelector('.hero-brand-first');
 
-    let currentFontSize = (window.innerWidth < 640 ? 52 : (window.innerWidth < 768 ? 68 : (window.innerWidth < 1024 ? 92 : 120)));
+    const w = window.innerWidth;
+    const isMobile = w < 640;
+    let currentFontSize = w < 400 ? 28 : (isMobile ? 32 : (w < 768 ? 68 : (w < 1024 ? 92 : 115)));
     if (brandTextEl) {
       const parsedFs = parseFloat(window.getComputedStyle(brandTextEl).fontSize);
       if (parsedFs > 0) currentFontSize = parsedFs;
     }
 
-    const calculatedTextHeight = (brandTextEl && brandTextEl.getBoundingClientRect().height > 0)
-      ? brandTextEl.getBoundingClientRect().height
+    const textHeight = (letterEl && letterEl.getBoundingClientRect().height > 0)
+      ? letterEl.getBoundingClientRect().height
       : currentFontSize;
 
-    const ratio = window.innerWidth < 640 ? 0.35 : 0.30;
-    const calculatedSize = (squareSize > 0 ? squareSize : (calculatedTextHeight * ratio));
-    const calculatedBorder = (borderWidth > 0 ? borderWidth : getAlphabetStrokeWidth(currentFontSize));
+    const ratio = isMobile ? 0.35 : 0.31;
+    let calculatedSize = propsRef.current.squareSize > 0
+      ? propsRef.current.squareSize
+      : Math.max(10, Math.round(textHeight * ratio));
+    let calculatedBorder = propsRef.current.borderWidth > 0
+      ? propsRef.current.borderWidth
+      : Math.max(2, Math.round(currentFontSize * (isMobile ? 0.085 : 0.082)));
 
-    const sq = stateRef.current.square;
-    sq.outerSize = calculatedSize;
-    sq.strokeWidth = calculatedBorder;
-
+    // If the actual hero square exists in DOM, strictly adopt its unrotated rendered size & border thickness
     if (squareInnerEl) {
       const sqRect = squareInnerEl.getBoundingClientRect();
+      const cs = window.getComputedStyle(squareInnerEl);
+      
+      // Determine true unrotated side length
+      let domWidth = 0;
+      if (sqWrapperEl && sqWrapperEl.getBoundingClientRect().width > 0) {
+        domWidth = sqWrapperEl.getBoundingClientRect().width;
+      } else if (parseFloat(cs.width) > 0) {
+        domWidth = parseFloat(cs.width);
+      } else if (sqRect.width > 0) {
+        domWidth = sqRect.width / 1.22474487;
+      }
+
+      const domBorder = parseFloat(cs.borderTopWidth) || parseFloat(cs.borderWidth);
+      if (domWidth > 0) calculatedSize = domWidth;
+      if (domBorder > 0) calculatedBorder = domBorder;
+
       if (sqRect.width > 0 && sqRect.height > 0) {
+        const sq = stateRef.current.square;
+        sq.outerSize = calculatedSize;
+        sq.strokeWidth = calculatedBorder;
         sq.targetLogoX = (sqRect.left + sqRect.right) / 2 - canvasRect.left;
         sq.targetLogoY = (sqRect.top + sqRect.bottom) / 2 - canvasRect.top;
         sq.floorY = sq.targetLogoY + calculatedSize / 2;
@@ -239,7 +298,10 @@ export default function CurtainLoader({
       }
     }
 
-    sq.targetLogoX = window.innerWidth / 2 + (window.innerWidth < 640 ? 60 : 100);
+    const sq = stateRef.current.square;
+    sq.outerSize = calculatedSize;
+    sq.strokeWidth = calculatedBorder;
+    sq.targetLogoX = window.innerWidth / 2 + (isMobile ? 60 : 100);
     sq.targetLogoY = window.innerHeight * 0.35;
     sq.floorY = sq.targetLogoY + calculatedSize / 2;
   };

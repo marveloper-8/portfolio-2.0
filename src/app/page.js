@@ -62,8 +62,8 @@ export default function Home() {
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
   const [isLoading, setIsLoading] = useState(true);
   const [isSquareDocked, setIsSquareDocked] = useState(false);
-  const [squareSize, setSquareSize] = useState(38);
-  const [borderWidth, setBorderWidth] = useState(10);
+  const [squareSize, setSquareSize] = useState(0);
+  const [borderWidth, setBorderWidth] = useState(0);
   const [isAvatarHovered, setIsAvatarHovered] = useState(false);
 
   // Avatar refs for continuous flight docking, organic teardrop bulge & green aura
@@ -82,24 +82,27 @@ export default function Home() {
   // Measure hero square matching Alata font metrics
   const measureHeroSquare = () => {
     if (typeof window === 'undefined') return;
-    const brandTextEl = document.querySelector('.hero-brand-text') || document.querySelector('#landing-brand-s');
-    let currentFontSize = (window.innerWidth < 640 ? 52 : (window.innerWidth < 768 ? 68 : (window.innerWidth < 1024 ? 92 : 120)));
+    const w = window.innerWidth;
+    const isMobile = w < 640;
+    const brandTextEl = document.querySelector('.hero-brand-text');
+    const letterEl = document.querySelector('#landing-brand-s') || document.querySelector('.hero-brand-first');
     
+    let currentFontSize = w < 400 ? 28 : (isMobile ? 32 : (w < 768 ? 68 : (w < 1024 ? 92 : 115)));
     if (brandTextEl) {
       const parsedFs = parseFloat(window.getComputedStyle(brandTextEl).fontSize);
       if (parsedFs > 0) currentFontSize = parsedFs;
     }
 
-    const calculatedTextHeight = (brandTextEl && brandTextEl.getBoundingClientRect().height > 0)
-      ? brandTextEl.getBoundingClientRect().height
+    const textHeight = (letterEl && letterEl.getBoundingClientRect().height > 0)
+      ? letterEl.getBoundingClientRect().height
       : currentFontSize;
 
-    const ratio = window.innerWidth < 640 ? 0.35 : 0.30;
-    const computedSize = Math.round(calculatedTextHeight * ratio);
-    const computedBorder = Math.max(2, Math.round(getAlphabetStrokeWidth(currentFontSize)));
+    const ratio = isMobile ? 0.35 : 0.31;
+    const computedSize = Math.max(10, Math.round(textHeight * ratio));
+    const computedBorder = Math.max(2, Math.round(currentFontSize * (isMobile ? 0.085 : 0.082)));
 
-    setSquareSize(computedSize || 38);
-    setBorderWidth(computedBorder || 10);
+    setSquareSize(computedSize);
+    setBorderWidth(computedBorder);
   };
 
   useEffect(() => {
@@ -713,17 +716,10 @@ EDUCATION:
                   <span id="landing-brand-s">e</span>
                 </span>
                 {/* Iconic Hollow Green Square at 15 deg tilt */}
-                <div
-                  id="landing-brand-square"
-                  style={{ width: `${squareSize}px`, height: `${squareSize}px` }}
-                >
+                <div id="landing-brand-square">
                   <div
                     id="landing-brand-square-inner"
                     style={{
-                      width: `${squareSize}px`,
-                      height: `${squareSize}px`,
-                      borderWidth: `${borderWidth}px`,
-                      borderStyle: 'solid',
                       opacity: isSquareDocked ? 1 : 0
                     }}
                   />
@@ -1193,12 +1189,27 @@ EDUCATION:
         <div className="modal-overlay" onClick={() => setIsCvModalOpen(false)}>
           <div className="modal-content" onClick={(e) => e.stopPropagation()}>
             <div className="modal-header-bar">
-              <span className="modal-title">Official Resume | Joshua Samuel Equere</span>
+              <div className="modal-header-top">
+                <div className="modal-title-group">
+                  <span className="modal-title">
+                    Official Resume <span className="modal-title-sep">|</span> <span className="modal-title-name">Joshua Samuel Equere</span>
+                  </span>
+                  <span className="modal-subtitle">Joshua Samuel Equere</span>
+                </div>
+                <button
+                  onClick={() => setIsCvModalOpen(false)}
+                  className="modal-close-btn modal-close-btn-mobile"
+                  aria-label="Close modal"
+                >
+                  ✕
+                </button>
+              </div>
+
               <div className="modal-actions">
                 <a
                   href="/resume.pdf"
                   download="Joshua_Samuel_Equere_CV.pdf"
-                  className="btn-pill-primary"
+                  className="btn-pill-primary modal-action-btn"
                   title="Download the official PDF resume"
                 >
                   <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.2" strokeLinecap="round" strokeLinejoin="round">
@@ -1206,14 +1217,15 @@ EDUCATION:
                     <polyline points="7 10 12 15 17 10" />
                     <line x1="12" y1="15" x2="12" y2="3" />
                   </svg>
-                  <span>Download PDF</span>
+                  <span className="modal-btn-label-desktop">Download PDF</span>
+                  <span className="modal-btn-label-mobile">Download</span>
                 </a>
 
                 <a
                   href="/resume.pdf"
                   target="_blank"
                   rel="noopener noreferrer"
-                  className="btn-pill-secondary"
+                  className="btn-pill-secondary modal-action-btn"
                   title="Open PDF in a new tab"
                 >
                   <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.2" strokeLinecap="round" strokeLinejoin="round">
@@ -1221,25 +1233,26 @@ EDUCATION:
                     <polyline points="15 3 21 3 21 9" />
                     <line x1="10" y1="14" x2="21" y2="3" />
                   </svg>
-                  <span>Open New Tab</span>
+                  <span className="modal-btn-label-desktop">Open New Tab</span>
+                  <span className="modal-btn-label-mobile">Open Tab</span>
                 </a>
 
                 <button
                   onClick={handleCopyAtsText}
-                  className="btn-pill-secondary"
+                  className="btn-pill-secondary modal-action-btn"
                   title="Copy Plain Text ATS Resume to clipboard"
                 >
                   <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
                     <rect x="9" y="9" width="13" height="13" rx="2" ry="2" />
                     <path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1" />
                   </svg>
-                  <span>Copy ATS Text</span>
+                  <span className="modal-btn-label-desktop">Copy ATS Text</span>
+                  <span className="modal-btn-label-mobile">Copy ATS</span>
                 </button>
 
                 <button
                   onClick={() => setIsCvModalOpen(false)}
-                  className="btn-pill-secondary"
-                  style={{ padding: '6px 12px' }}
+                  className="modal-close-btn modal-close-btn-desktop"
                   aria-label="Close modal"
                 >
                   ✕
