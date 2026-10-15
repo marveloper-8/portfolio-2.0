@@ -496,19 +496,7 @@ export default function ProjectCardCinematic({
                 }}
               />
 
-              <div
-                style={{
-                  position: 'relative',
-                  zIndex: 10,
-                  display: 'flex',
-                  flexDirection: 'column',
-                  alignItems: 'center',
-                  justifyContent: 'center',
-                  width: '100%',
-                  maxWidth: '380px',
-                  gap: '14px',
-                }}
-              >
+              <div className="dock-phase-wrapper">
                 {/* Spotlight Search & Top Hit Wrapper */}
                 <div style={{ width: '100%', display: 'flex', flexDirection: 'column', alignItems: 'center', position: 'relative' }}>
                   {/* Top Hit App Result Card */}
@@ -516,41 +504,19 @@ export default function ProjectCardCinematic({
                     <div
                       className="anim-spotlight-card"
                       style={{
-                        position: 'absolute',
-                        bottom: 'calc(100% + 8px)',
-                        zIndex: 30,
-                        width: '100%',
-                        padding: '10px 14px',
-                        borderRadius: '18px',
-                        background: 'rgba(255, 255, 255, 0.95)',
-                        backdropFilter: 'blur(20px)',
-                        border: '1px solid rgba(255, 255, 255, 0.95)',
-                        boxShadow: '0 10px 25px rgba(0, 0, 0, 0.1), inset 0 1px 1px #ffffff',
-                        display: 'flex',
-                        alignItems: 'center',
-                        justifyContent: 'space-between',
-                        gap: '10px',
                         transform: searchState === 'launching' ? 'scale(0.97)' : 'scale(1)',
-                        transition: 'all 0.3s ease',
                       }}
                     >
-                      <div style={{ display: 'flex', alignItems: 'center', gap: '10px', minWidth: 0, flex: 1 }}>
+                      <div style={{ display: 'flex', alignItems: 'center', gap: '8px', minWidth: 0, flex: 1 }}>
                         <img
                           src={iconImage || logoImage}
                           alt={`${name} App Icon`}
-                          style={{
-                            width: '38px',
-                            height: '38px',
-                            borderRadius: '10px',
-                            objectFit: 'contain',
-                            border: '1px solid #f0f0f0',
-                            flexShrink: 0,
-                          }}
+                          className="spotlight-app-icon"
                         />
                         <div style={{ display: 'flex', flexDirection: 'column', minWidth: 0, flex: 1 }}>
                           <span
                             style={{
-                              fontSize: '12.5px',
+                              fontSize: '12px',
                               fontWeight: 700,
                               color: '#0a0a0a',
                               whiteSpace: 'nowrap',
@@ -561,7 +527,7 @@ export default function ProjectCardCinematic({
                           >
                             {getSearchQuery()}
                           </span>
-                          <span style={{ fontSize: '10px', color: '#737373', fontWeight: 500, marginTop: '2px' }}>
+                          <span style={{ fontSize: '9.5px', color: '#737373', fontWeight: 500, marginTop: '2px' }}>
                             Application • Top Hit
                           </span>
                         </div>
@@ -569,10 +535,10 @@ export default function ProjectCardCinematic({
 
                       <div
                         style={{
-                          padding: '4px 12px',
+                          padding: '4px 10px',
                           borderRadius: '9999px',
                           background: '#0a0a0a',
-                          fontSize: '10.5px',
+                          fontSize: '10px',
                           fontWeight: 700,
                           color: '#ffffff',
                           flexShrink: 0,
@@ -629,46 +595,36 @@ export default function ProjectCardCinematic({
                   </div>
                 </div>
 
-                {/* Glass iPhone Bottom Nav Dock */}
-                <div
-                  className="anim-dock-container"
-                  style={{
-                    width: '100%',
-                    padding: '12px 24px',
-                    borderRadius: '32px',
-                    background: 'rgba(255, 255, 255, 0.55)',
-                    backdropFilter: 'blur(20px)',
-                    border: '1px solid rgba(255, 255, 255, 0.8)',
-                    boxShadow: '0 10px 25px rgba(0, 0, 0, 0.06), inset 0 1px 1.5px rgba(255,255,255,0.9)',
-                    display: 'grid',
-                    gridTemplateColumns: 'repeat(3, 1fr)',
-                    alignItems: 'center',
-                    justifyItems: 'center',
-                  }}
-                >
+                {/* Glass iPhone Bottom Nav Dock (Exact style from nexa-website) */}
+                <div className="anim-dock-container">
                   {/* Left: Phone Icon */}
-                  <div className="anim-dock-icon-left" style={{ display: 'flex', justifyContent: 'center' }}>
-                    <img src="/projects/phone-icon.png" alt="Phone" style={{ width: '48px', height: '48px', objectFit: 'contain' }} />
+                  <div className="anim-dock-icon-left" style={{ width: '100%', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
+                    <img
+                      src="/projects/phone-icon.png"
+                      alt="Phone"
+                      loading="eager"
+                      className="dock-nav-icon dock-nav-icon-side"
+                    />
                   </div>
 
-                  {/* Center: App Icon */}
-                  <div className="anim-dock-icon-center" style={{ display: 'flex', justifyContent: 'center' }}>
+                  {/* Center: App Icon (Exact style from nexa-website: drop-shadow-[0_5px_10px_rgba(0,0,0,0.11)], hover:scale-112, no container) */}
+                  <div className="anim-dock-icon-center" style={{ width: '100%', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
                     <img
                       src={iconImage || logoImage}
                       alt={`${name} App Icon`}
-                      style={{
-                        width: '52px',
-                        height: '52px',
-                        objectFit: 'contain',
-                        borderRadius: '12px',
-                        boxShadow: '0 5px 12px rgba(0,0,0,0.12)',
-                      }}
+                      loading="eager"
+                      className="dock-nav-icon dock-nav-icon-center"
                     />
                   </div>
 
                   {/* Right: Messages Icon */}
-                  <div className="anim-dock-icon-right" style={{ display: 'flex', justifyContent: 'center' }}>
-                    <img src="/projects/text-icon.png" alt="Messages" style={{ width: '48px', height: '48px', objectFit: 'contain' }} />
+                  <div className="anim-dock-icon-right" style={{ width: '100%', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
+                    <img
+                      src="/projects/text-icon.png"
+                      alt="Messages"
+                      loading="eager"
+                      className="dock-nav-icon dock-nav-icon-side"
+                    />
                   </div>
                 </div>
               </div>

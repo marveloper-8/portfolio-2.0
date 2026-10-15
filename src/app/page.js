@@ -1305,14 +1305,28 @@ EDUCATION:
               </div>
             </div>
 
-            {/* Actual PDF Viewer in iframe */}
-            <div className="modal-body">
-              <div className="pdf-preview-container">
-                <iframe
-                  src="/resume.pdf#toolbar=1&navpanes=0&scrollbar=1"
-                  className="pdf-preview-frame"
-                  title="Joshua Samuel Equere - Software Engineer Resume"
-                />
+            {/* Seamless Document Preview displaying all pages */}
+            <div className="modal-body modal-body-pdf-scroll">
+              <div className="pdf-pages-scroll-stage">
+                {/* Page 1 */}
+                <div className="pdf-page-card">
+                  <img
+                    src="/resume-page-1.png"
+                    alt="Joshua Samuel Equere - Resume Page 1"
+                    className="pdf-page-img"
+                    loading="eager"
+                  />
+                </div>
+
+                {/* Page 2 */}
+                <div className="pdf-page-card">
+                  <img
+                    src="/resume-page-2.png"
+                    alt="Joshua Samuel Equere - Resume Page 2"
+                    className="pdf-page-img"
+                    loading="eager"
+                  />
+                </div>
               </div>
             </div>
           </div>
