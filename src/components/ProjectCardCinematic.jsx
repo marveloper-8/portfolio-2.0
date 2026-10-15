@@ -64,6 +64,16 @@ export default function ProjectCardCinematic({
     return 'https://donethat.online';
   };
 
+  const getSpotlightIcon = () => {
+    const isLola = id === '01' || name.toLowerCase().includes('lola');
+    const isDoneThat = id === '02' || name.toLowerCase().includes('donethat');
+    const isBible = id === '03' || name.toLowerCase().includes('bible');
+    if (isLola) return '/projects/lola-icon-square.png';
+    if (isDoneThat) return '/projects/donethat-icon-square.png';
+    if (isBible) return '/projects/bible-icon-square.png';
+    return iconImage || logoImage;
+  };
+
   const getInfoAnimClass = () => {
     const isLola = id === '01' || name.toLowerCase().includes('lola');
     const isDoneThat = id === '02' || name.toLowerCase().includes('donethat');
@@ -508,11 +518,13 @@ export default function ProjectCardCinematic({
                       }}
                     >
                       <div style={{ display: 'flex', alignItems: 'center', gap: '8px', minWidth: 0, flex: 1 }}>
-                        <img
-                          src={iconImage || logoImage}
-                          alt={`${name} App Icon`}
-                          className="spotlight-app-icon"
-                        />
+                        <div className="spotlight-app-icon-container">
+                          <img
+                            src={getSpotlightIcon()}
+                            alt={`${name} App Icon`}
+                            className="spotlight-app-icon-img"
+                          />
+                        </div>
                         <div style={{ display: 'flex', flexDirection: 'column', minWidth: 0, flex: 1 }}>
                           <span
                             style={{
