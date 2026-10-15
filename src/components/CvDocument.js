@@ -14,6 +14,8 @@ export default function CvDocument({ isModal = false }) {
           <a href="https://github.com/marveloper-8" target="_blank" rel="noopener noreferrer" className="cv-contact-item">github.com/marveloper-8</a>
           <span className="cv-separator">•</span>
           <a href="https://linkedin.com/in/marveloper" target="_blank" rel="noopener noreferrer" className="cv-contact-item">linkedin.com/in/marveloper</a>
+          <span className="cv-separator">•</span>
+          <a href="https://josh.trynexalabs.com" target="_blank" rel="noopener noreferrer" className="cv-contact-item">josh.trynexalabs.com</a>
         </div>
         <div className="cv-role-title">SOFTWARE ENGINEER (MOBILE, WEB, BACKEND, &amp; CLOUD)</div>
         <p className="cv-summary">
@@ -29,7 +31,7 @@ export default function CvDocument({ isModal = false }) {
             <strong>Backend &amp; Data:</strong> Go (Golang), Python, Node.js, Nest.js, Express.js, Redis, MySQL, PostgreSQL, MongoDB, Pub/Sub, Kafka, RabbitMQ
           </div>
           <div className="cv-skill-line">
-            <strong>Web &amp; Mobile:</strong> React, Next.js, Svelte, React Native, Expo, Redux, D3.js, Tailwind CSS, WebSockets, Rest APIs
+            <strong>Web &amp; Mobile:</strong> React, Next.js, React Native, Redux, D3.js, Tailwind CSS, WebSockets, Rest APIs, Svelte
           </div>
           <div className="cv-skill-line">
             <strong>Cloud &amp; DevOps:</strong> AWS (EKS, S3, CloudFront), Docker, Kubernetes, Terraform, Ansible, GitHub Actions, Jenkins, CI/CD, Automated Testing Frameworks (Cypress, Playwright)
@@ -157,7 +159,7 @@ export default function CvDocument({ isModal = false }) {
             <li>Broadened accessibility for users on slow connections by shrinking the mobile application's download size by 60%.</li>
           </ul>
           <div className="cv-job-env">
-            Environment: React, TypeScript, Redux, Tailwind CSS • <a href="https://synoption.com" target="_blank" rel="noopener noreferrer">https://synoption.com</a>
+            Environment: React, TypeScript, Redux, Tailwind CSS
           </div>
         </div>
 

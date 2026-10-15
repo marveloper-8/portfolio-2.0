@@ -408,16 +408,16 @@ export default function Home() {
   const handleCopyAtsText = () => {
     const text = `JOSHUA SAMUEL EQUERE
 Email: josh.sam.builds@gmail.com | Phone: +2348074681328
-GitHub: github.com/marveloper-8 | LinkedIn: linkedin.com/in/marveloper
+GitHub: github.com/marveloper-8 | LinkedIn: linkedin.com/in/marveloper | Portfolio: josh.trynexalabs.com
 
 SOFTWARE ENGINEER (MOBILE, WEB, BACKEND, & CLOUD)
 Senior Software Engineer who builds complete digital products from start to finish. I specialize in the four pillars of modern software: mobile apps, web interfaces, robust servers, and reliable cloud infrastructure. I focus on creating fast, scalable systems that can easily handle heavy load/usage without problems.
 
 CORE SKILLS:
 - Backend & Data: Go (Golang), Python, Node.js, Nest.js, Express.js, Redis, MySQL, PostgreSQL, MongoDB, Pub/Sub, Kafka, RabbitMQ
-- Web & Mobile: React, Next.js, React Native, Redux, D3.js, Tailwind CSS, WebSockets, Rest APIs
-- Cloud & DevOps: AWS (EKS, S3, CloudFront), Docker, Kubernetes, Terraform, Ansible, GitHub Actions, Jenkins, CI/CD, Cypress, Playwright
-- Architecture: Microservices, GraphQL Federation, Event-Driven, DDD, Offline-First Architecture
+- Web & Mobile: React, Next.js, React Native, Redux, D3.js, Tailwind CSS, WebSockets, Rest APIs, Svelte
+- Cloud & DevOps: AWS (EKS, S3, CloudFront), Docker, Kubernetes, Terraform, Ansible, GitHub Actions, Jenkins, CI/CD, Automated Testing Frameworks (Cypress, Playwright)
+- Architecture: Microservices, GraphQL Federation, Event-Driven, Domain-Driven Design (DDD), Offline-First Architecture
 
 PROFESSIONAL EXPERIENCE:
 NexaLabs LTD (Jun 2026 - Present)
